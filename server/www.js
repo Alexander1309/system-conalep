@@ -3,8 +3,10 @@ const Mongoose = require('mongoose')
 const morgan = require('morgan')
 const cors = require('cors')
 
+const authRouter = require('./router/auth.router')
+
 require('dotenv').config()
-const port = process.env.PORT
+const port = process.env.PORT || 3007
 const connection = Mongoose.connection
 const app = express()
 
@@ -20,5 +22,7 @@ connection.once('open', () => console.log('Donnected database...'))
 app.get('/', (req, res) => {
     res.send(`Server run on port -> ${port}`)
 })
+
+app.use('/auth/', authRouter)
 
 app.listen(port, () => console.log(`Server run on port -> ${port}`))

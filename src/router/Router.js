@@ -7,18 +7,18 @@ import {
 import App from '../App'
 import Auth from '../components/Auth/Index'
 
-const PrivateRoute = ({children, isPrivate , authed, url, ...rest}) => {
+const PrivateRoute = ({children, isPrivate , auth, url, ...rest}) => {
     return (
       isPrivate === true
         ? <Route
             {...rest}
-            render={(props) => authed === true
+            render={(props) => auth === true
             ? children
             : <Redirect to={{pathname: url, state: {from: props.location}}} />}
         />
         : <Route
             {...rest}
-            render={(props) => authed === false
+            render={(props) => auth === false
             ? children
             : <Redirect to={{pathname: url, state: {from: props.location}}} />}
         />
@@ -33,7 +33,7 @@ const Router = () => {
                     <Route path="/" exact>
                         <App />
                     </Route>
-                    <PrivateRoute path="/auth" isPrivate={false} authed={false} url="/" >
+                    <PrivateRoute path="/auth" isPrivate={false} auth={false} url="/" >
                         <Auth />
                     </PrivateRoute>
                 </Switch>
