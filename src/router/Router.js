@@ -4,24 +4,25 @@ import {
     Switch,
     Route,
 } from 'react-router-dom'
+import auth from '../lib/auth'
 import App from '../App'
 import Auth from '../components/Auth/Index'
+import Home from '../components/Home/Index'
 
-const PrivateRoute = ({children, isPrivate , auth, url, ...rest}) => {
+const PrivateRoute = ({children, auth, url, ...rest}) => {
     return (
-      isPrivate === true
-        ? <Route
+        <Route
             {...rest}
-            render={(props) => auth === true
+            render={({ location }) => auth === true
             ? children
-            : <Redirect to={{pathname: url, state: {from: props.location}}} />}
+            : <Redirect push to={{pathname: url, state: {from: location}}} />}
         />
-        : <Route
-            {...rest}
-            render={(props) => auth === false
-            ? children
-            : <Redirect to={{pathname: url, state: {from: props.location}}} />}
-        />
+    )
+}
+
+const NoMatch = () => {
+    return (
+        <h1>404</h1>
     )
 }
 
@@ -30,12 +31,18 @@ const Router = () => {
         <>
             <BrowserRouter>
                 <Switch>
-                    <Route path="/" exact>
+                    <Route exact path="/">
                         <App />
                     </Route>
-                    <PrivateRoute path="/auth" isPrivate={false} auth={false} url="/" >
+                    <Route path="/auth/:id">
                         <Auth />
+                    </Route>
+                    <PrivateRoute path="/home" auth={auth.isAuth()} url="/">
+                        <Home />
                     </PrivateRoute>
+                    <Route path="*">
+                        <NoMatch />
+                    </Route>
                 </Switch>
             </BrowserRouter>
         </>

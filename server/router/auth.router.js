@@ -11,14 +11,17 @@ router.post('/signIn', async (req, res) => {
         const verifyPass = await verifyPassword(password, user.password)
         if(verifyPass) {
             try {
-                const token = await jwt.sign({user}, process.env.SECRET_KEY)
+                const token = await jwt.sign({user}, process.env.SECRET_KEY, {expiresIn: '6d'})
                 res.json({
                     server: 'UserExist',
                     token,
                     dataUser: {
                         id: user._id,
                         name: user.name,
-                        email: user.email
+                        email: user.email,
+                        workArea: user.workArea,
+                        role: user.role,
+                        registeredOn: user.registeredOn
                     }
                 })
             } catch(e) {
@@ -30,11 +33,34 @@ router.post('/signIn', async (req, res) => {
 })
 
 router.post('/signUp', async (req, res) => {
-    const { name, email, password } = req.body
-    const newUser = new UserModel({name, email, password: await encryptPassword(password)})
+    const { name, email, password, accessCode } = req.body
     try {
-        await newUser.save()
-        res.json({server: 'UserCreated'}).status(200)
+        const { workArea, role } = await jwt.verify(accessCode, process.env.SECRET_KEY)
+        if(workArea !== undefined && role !== undefined) {
+            const newUser = new UserModel({
+                name,
+                email,
+                password: await encryptPassword(password),
+                workArea,
+                role,
+            })
+            try {
+                await newUser.save()
+                res.json({server: 'UserCreated'}).status(200)
+            } catch(e) {
+                res.json({server: 'UserNotCreated'}).status(200)
+            }
+        } else res.json({server: 'InvalidCode'}).status(200)
+    } catch(e) {
+        res.json({server: 'InvalidCode'}).status(200)
+    }
+})
+
+router.post('/token', async (req, res) => {
+    const { workArea, role } = req.body
+    try {
+        const token = await jwt.sign({workArea, role}, process.env.SECRET_KEY, {expiresIn: '1m'})
+        res.json({token})
     } catch(e) {
         res.json({server: 'UserNotCreated'}).status(200)
     }

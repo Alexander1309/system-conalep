@@ -1,7 +1,8 @@
-import { Link } from 'react-router-dom'
+import { Link, withRouter } from 'react-router-dom'
+import auth from '../lib/auth'
 import Logo from '../img/logo-b.svg'
 
-const Header = () => {
+const Header = ({ history }) => {
     return (
         <>
             <div className="container-fluid bg-dark">
@@ -16,10 +17,16 @@ const Header = () => {
                                 <div className="ms-auto">
                                     <ul className="navbar-nav">
                                         <li className="nav-item">
-                                            <Link className="nav-link active" to="/">Home</Link>
+                                            <Link className="nav-link active" to="/home">Home</Link>
                                         </li>
                                         <li className="nav-item">
-                                            <Link className="nav-link active" to="/auth">Sign In</Link>
+                                            <Link className="nav-link active" to="#" onClick={() => {
+                                                auth.logOut(() => {
+                                                    localStorage.removeItem('token')
+                                                    localStorage.removeItem('user')
+                                                    history.push('/')
+                                                })
+                                            }}>Log Out</Link>
                                         </li>  
                                     </ul>
                                 </div>
@@ -32,4 +39,4 @@ const Header = () => {
     )
 }
 
-export default Header
+export default withRouter(Header)

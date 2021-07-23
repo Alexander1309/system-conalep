@@ -1,11 +1,19 @@
-import Header from './components/Header'
+import { useEffect } from 'react'
+import auth from './lib/auth'
+import { withRouter, Link } from 'react-router-dom'
 
-const App = () => {
+const App = ({ history }) => {
+
+  useEffect(() => {
+    if(auth.isAuth()) history.push('/home')
+  }, [history])
+
   return (
     <>
-      <Header />
+      <Link className="btn btn-success" to="/auth/signIn">Sign In</Link>
+      <Link className="btn btn-success ms-2" to="/auth/signUp">Sign Up</Link>
     </>
   )
 }
 
-export default App;
+export default withRouter(App)

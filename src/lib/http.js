@@ -1,17 +1,18 @@
 import axios from 'axios'
+const address = 'http://localhost:3007/'
 
 export const get = async url => {
-    const res = await (await axios.get(url)).data
+    const res = await (await axios.get(`${address}${url}`)).data
     return res
 }
 
 export const post = async (url, data) => {
-    const res = await (await axios.post(url, data)).data
+    const res = await (await axios.post(`${address}${url}`, data)).data
     return res
 }
 
 export const getItSafely = async url => {
-    const res = await (await axios.get(url, {
+    const res = await (await axios.get(`${address}${url}`, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
@@ -20,7 +21,7 @@ export const getItSafely = async url => {
 }
 
 export const getItSafelyById = async urlWithId => {
-    const res = await (await axios.get(urlWithId, {
+    const res = await (await axios.get(`${address}${urlWithId}`, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
@@ -29,7 +30,7 @@ export const getItSafelyById = async urlWithId => {
 }
 
 export const postItSafely = async url => {
-    const res = await (await axios.get(url, {
+    const res = await (await axios.get(`${address}${url}`, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
@@ -38,7 +39,7 @@ export const postItSafely = async url => {
 }
 
 export const updateItSafely = async url => {
-    const res = await (await axios.put(url, {
+    const res = await (await axios.put(`${address}${url}`, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
@@ -48,7 +49,7 @@ export const updateItSafely = async url => {
 
 
 export const deleteItSafely = async url => {
-    const res = await (await axios.put(url, {
+    const res = await (await axios.put(`${address}${url}`, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
