@@ -5,17 +5,17 @@ import {
     Route,
 } from 'react-router-dom'
 import auth from '../lib/auth'
-import App from '../App'
+import App from '../components/App/Index'
 import Auth from '../components/Auth/Index'
 import Home from '../components/Home/Index'
 
-const PrivateRoute = ({children, auth, url, ...rest}) => {
+const PrivateRoute = ({children, auth, ...rest}) => {
     return (
         <Route
             {...rest}
             render={({ location }) => auth === true
             ? children
-            : <Redirect push to={{pathname: url, state: {from: location}}} />}
+            : <Redirect push to={{pathname: "/", state: {from: location}}} />}
         />
     )
 }
@@ -34,10 +34,10 @@ const Router = () => {
                     <Route exact path="/">
                         <App />
                     </Route>
-                    <Route path="/auth/:id">
+                    <Route path="/auth">
                         <Auth />
                     </Route>
-                    <PrivateRoute path="/home" auth={auth.isAuth()} url="/">
+                    <PrivateRoute path="/home" auth={auth.isAuth()}>
                         <Home />
                     </PrivateRoute>
                     <Route path="*">

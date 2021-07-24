@@ -1,6 +1,6 @@
 import { Link, withRouter } from 'react-router-dom'
-import auth from '../lib/auth'
-import Logo from '../img/logo-b.svg'
+import auth from '../../lib/auth'
+import Logo from '../../img/logo-b.svg'
 
 const Header = ({ history }) => {
     return (
@@ -9,25 +9,30 @@ const Header = ({ history }) => {
                 <div className="container">
                     <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
                         <div className="container-fluid">
-                            <img src={Logo} alt="" className="d-inline-block align-text-top" />
+                            <Link to="/">
+                                <img src={Logo} alt="Logo conalep" className="d-inline-block align-text-top" />
+                            </Link>
                             <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                                 <span className="navbar-toggler-icon"></span>
                             </button>
                             <div className="collapse navbar-collapse" id="navbarNav">
                                 <div className="ms-auto">
                                     <ul className="navbar-nav">
-                                        <li className="nav-item">
-                                            <Link className="nav-link active" to="/home">Home</Link>
+                                        <li>
+                                            <Link className="nav-link" to="/dashboard">Dashboard</Link>
                                         </li>
-                                        <li className="nav-item">
-                                            <Link className="nav-link active" to="#" onClick={() => {
+                                        <li>
+                                            <Link className="nav-link" to="/profile">Profile</Link>
+                                        </li>
+                                        <li>
+                                            <Link className="nav-link" to="#" onClick={() => {
                                                 auth.logOut(() => {
                                                     localStorage.removeItem('token')
                                                     localStorage.removeItem('user')
                                                     history.push('/')
                                                 })
                                             }}>Log Out</Link>
-                                        </li>  
+                                        </li>
                                     </ul>
                                 </div>
                             </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withRouter, useParams } from 'react-router-dom'
+import { withRouter } from 'react-router-dom'
 import { alertMessage } from '../../lib/alerts'
 import auth from '../../lib/auth'
 import { post } from '../../lib/http'
@@ -11,8 +11,7 @@ import SignIn from './SignIn'
 import SignUp from './SignUp'
 
 const Auth = ({ history }) => {
-    const { id } = useParams()
-    const [hidden, setHidden] = useState(false)
+    const [hidden, setHidden] = useState(true)
     const [submit, setSubmit] = useState(false)
     const [signIn, setSignIn] = useState({ email: '', password: '' })
     const [signUp, setSignUp] = useState({ name: '', email: '', password: '', accessCode: '' })
@@ -38,7 +37,7 @@ const Auth = ({ history }) => {
                 if(confirm) {
                     localStorage.setItem('token', res.token)
                     localStorage.setItem('user', JSON.stringify(res.dataUser))
-                    auth.signIn(() => history.push('/home'))
+                    setTimeout(auth.signIn(() => history.push('/home')), 300)
                 }
             }
         }
@@ -71,9 +70,9 @@ const Auth = ({ history }) => {
 
     useEffect(() => {
         if(auth.isAuth()) history.push('/home')
-        if(id === 'signIn') setHidden(false)
-        else if(id === 'signUp') setHidden(true)
-    }, [id, history])
+        if(hidden) document.title = "Conalep - Sign Up"
+        else document.title = "Conalep - Sign In"
+    }, [history, hidden])
 
     return (
         <>

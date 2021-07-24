@@ -6,13 +6,13 @@ class Auth {
     signIn(cb) {
         this.authentication = true
         this.isAuth()
-        setTimeout(cb, 100)
+        setTimeout(cb, 200)
     }
 
     logOut(cb) {
         this.authentication = false
         this.isAuth()
-        setTimeout(cb, 100)
+        setTimeout(cb, 200)
     }
 
     isAuth() {
