@@ -2,10 +2,19 @@ const SignUp = ({ state, setState }) => {
     return (
         <>
             <div className="row">
-                <div className="mb-3">
-                    <label htmlFor="name" className="form-label" >Name</label>
-                    <input type="text" id="name" name="name" className="form-control" onChange={(e) => setState({...state, name: e.target.value})}/>
+                <div className="col">
+                    <div className="mb-3">
+                        <label htmlFor="name" className="form-label" >Name</label>
+                        <input type="text" id="name" name="name" className="form-control" onChange={(e) => setState({...state, name: e.target.value})}/>
+                    </div>
                 </div>
+                <div className="col">
+                    <div className="mb-3">
+                        <label htmlFor="lastName" className="form-label" >Last Name</label>
+                        <input type="text" id="lastName" name="lastName" className="form-control" onChange={(e) => setState({...state, lastName: e.target.value})}/>
+                    </div>
+                </div>
+                <div className="mb-1"></div>
                 <div className="col">
                     <div className="mb-3">
                         <label htmlFor="email" className="form-label">Email</label>

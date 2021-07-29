@@ -1,15 +1,5 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    background: #c9c9c9;
-}
-
 .btn-signUp {
-    background-color: #047c64;
+    background-color: var(--color-primary);
     color: #fff;
     font-weight: bold;
     border-radius: 8px;
@@ -18,9 +8,9 @@ body {
 
 .btn-signUp:hover {
     border-radius: 8px;
-    border: 1px solid #047c64;
+    border: 1px solid var(--color-primary);
     background-color: transparent;
-    color: #047c64;
+    color: var(--color-primary);
 }
 
 .title {

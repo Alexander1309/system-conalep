@@ -14,7 +14,7 @@ const Auth = ({ history }) => {
     const [hidden, setHidden] = useState(true)
     const [submit, setSubmit] = useState(false)
     const [signIn, setSignIn] = useState({ email: '', password: '' })
-    const [signUp, setSignUp] = useState({ name: '', email: '', password: '', accessCode: '' })
+    const [signUp, setSignUp] = useState({ name: '', lastName: '', email: '', password: '', accessCode: '' })
 
     const handleHidden = () => {
         setSignIn({ email: '', password: '' })
@@ -45,7 +45,7 @@ const Auth = ({ history }) => {
     
     const handleSubmitSignUp = async (e) => {
         e.preventDefault()
-        if(signUp.name === '' || signUp.email === '' || signUp.password === '' || signUp.accessCode === '') alertMessage('Empty fields', 'All fields are mandatory.', 'warning')
+        if(signUp.name === '' || signUp.lastName === '' || signUp.email === '' || signUp.password === '' || signUp.accessCode === '') alertMessage('Empty fields', 'All fields are mandatory.', 'warning')
         else if(!validateEmails.test(signUp.email)) alertMessage('Invalid mail', 'The email is not valid, it must be an institutional email.', 'error')
         else if(!validatePasswords.test(signUp.password)) alertMessage('Invalid password', 'The password must contain 8 or 16 digits and must contain upper and lower case letters.', 'error')
         else {

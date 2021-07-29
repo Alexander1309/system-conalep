@@ -5,9 +5,11 @@ import {
     Route,
 } from 'react-router-dom'
 import auth from '../lib/auth'
+
 import App from '../components/App/Index'
 import Auth from '../components/Auth/Index'
 import Home from '../components/Home/Index'
+import Dashboard from '../components/Dashboard/Index'
 
 const PrivateRoute = ({children, auth, ...rest}) => {
     return (
@@ -40,6 +42,9 @@ const Router = () => {
                     <PrivateRoute path="/home" auth={auth.isAuth()}>
                         <Home />
                     </PrivateRoute>
+                    <PrivateRoute path="/dashboard" auth={auth.isAuth()}>
+                        <Dashboard />
+                    </PrivateRoute> 
                     <Route path="*">
                         <NoMatch />
                     </Route>

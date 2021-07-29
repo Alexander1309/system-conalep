@@ -12,11 +12,23 @@ export const alertMessage = async (title, text, icon) => {
         confirmButtonText: 'Aceptar',
         confirmButtonColor: '#047c64',
         allowOutsideClick: false,
-        allowEnterKey: false,
         allowEscapeKey: false,
         didClose: () => {
             MySwal.clickConfirm()
         }
     })
     return res
+}
+
+export const alertSelectFile = async (title, accept) => {
+    const { value: file } = await MySwal.fire({
+        title: `${title}`,
+        input: 'file',
+        inputAttributes: {
+          'accept': `${accept}`,
+        },
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+    })
+    return file
 }

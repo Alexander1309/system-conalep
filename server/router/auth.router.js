@@ -17,10 +17,11 @@ router.post('/signIn', async (req, res) => {
                     token,
                     dataUser: {
                         id: user._id,
-                        name: user.name,
+                        name: `${user.name} ${user.lastName}`,
                         email: user.email,
                         workArea: user.workArea,
                         role: user.role,
+                        profilePicture: user.profilePicture,
                         registeredOn: user.registeredOn
                     }
                 })
@@ -33,12 +34,13 @@ router.post('/signIn', async (req, res) => {
 })
 
 router.post('/signUp', async (req, res) => {
-    const { name, email, password, accessCode } = req.body
+    const { name, lastName, email, password, accessCode } = req.body
     try {
         const { workArea, role } = await jwt.verify(accessCode, process.env.SECRET_KEY)
         if(workArea !== undefined && role !== undefined) {
             const newUser = new UserModel({
                 name,
+                lastName,
                 email,
                 password: await encryptPassword(password),
                 workArea,

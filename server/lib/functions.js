@@ -1,4 +1,6 @@
 const bcryptjs = require('bcryptjs')
+const jwt = require('jsonwebtoken')
+require('dotenv').config()
 const functions = {}
 
 functions.encryptPassword = async password => {
@@ -17,6 +19,38 @@ functions.verifyPassword = async (password, hash) => {
         return verifyPass
     } catch(e) {
         console.log('Error encrypt password...')
+    }
+}
+
+functions.verifyToken = (req, res, next) => {
+    try {
+        const token = req.headers['authorization'].split(' ')[1]
+        if(token !== undefined){
+            jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
+                if(err) res.sendStatus(403)
+                else {
+                    req.dataUser = data.user
+                    next()
+                }
+            })
+        } else {
+            res.sendStatus(403)
+        }
+    } catch(e) {
+        res.sendStatus(403)
+    }
+}
+
+functions.getDate = () =>{
+    try {
+        const newDate = new Date()
+        const day = newDate.getDay() + 7
+        const month = newDate.getMonth() + 1
+        const year = newDate.getFullYear()
+        const date = `${day}-${month}-${year}`
+        return date
+    } catch(e) {
+        console.log(e)
     }
 }
 

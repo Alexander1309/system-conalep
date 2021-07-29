@@ -22,9 +22,6 @@ const Header = ({ history }) => {
                                             <Link className="nav-link" to="/dashboard">Dashboard</Link>
                                         </li>
                                         <li>
-                                            <Link className="nav-link" to="/profile">Profile</Link>
-                                        </li>
-                                        <li>
                                             <Link className="nav-link" to="#" onClick={() => {
                                                 auth.logOut(() => {
                                                     localStorage.removeItem('token')

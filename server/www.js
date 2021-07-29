@@ -4,6 +4,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 
 const authRouter = require('./router/auth.router')
+const dashboardRouter = require('./router/dashboard.router')
 
 require('dotenv').config()
 const port = process.env.PORT || 3007
@@ -24,5 +25,6 @@ app.get('/', (req, res) => {
 })
 
 app.use('/auth/', authRouter)
+app.use('/dashboard/', dashboardRouter)
 
 app.listen(port, () => console.log(`Server run on port -> ${port}`))
