@@ -27,18 +27,23 @@ const Auth = ({ history }) => {
         if(signIn.email === '' || signIn.password === '') alertMessage('Empty fields', 'All fields are mandatory.', 'warning')
         else {
             setSubmit(true)
-            const res = await post('auth/signIn', signIn)
-            if(res.server === 'UserNotExist') {
-                alertMessage('Incorrect data', 'The username and/or password are incorrect, please check that your details are correct.', 'error')
-                setSubmit(false)
-            } else if(res.server === 'UserExist') {
-                setSubmit(false)
-                const confirm = await (await alertMessage('User login', 'You are successfully logged in.', 'success')).isConfirmed
-                if(confirm) {
-                    localStorage.setItem('token', res.token)
-                    localStorage.setItem('user', JSON.stringify(res.dataUser))
-                    setTimeout(auth.signIn(() => history.push('/home')), 300)
+            try {
+                const res = await post('auth/signIn', signIn)
+                if(res.server === 'UserNotExist') {
+                    alertMessage('Incorrect data', 'The username and/or password are incorrect, please check that your details are correct.', 'error')
+                    setSubmit(false)
+                } else if(res.server === 'UserExist') {
+                    setSubmit(false)
+                    const confirm = await (await alertMessage('User login', 'You are successfully logged in.', 'success')).isConfirmed
+                    if(confirm) {
+                        localStorage.setItem('token', res.token)
+                        localStorage.setItem('user', JSON.stringify(res.dataUser))
+                        setTimeout(auth.signIn(() => history.push('/home')), 300)
+                    }
                 }
+            } catch(e) {
+                setSubmit(false)
+                alertMessage('No Internet connection', 'No internet connection please check your internet.', 'error') 
             }
         }
     }
@@ -50,21 +55,26 @@ const Auth = ({ history }) => {
         else if(!validatePasswords.test(signUp.password)) alertMessage('Invalid password', 'The password must contain 8 or 16 digits and must contain upper and lower case letters.', 'error')
         else {
             setSubmit(true)
-            const res = await (await post('auth/signUp', signUp)).server
-            if (res === 'InvalidCode') {
-                alertMessage('Invalid access code', 'The access code is invalid please check that the code is valid.', 'error')
-                setSubmit(false)
-            } else if(res === 'UserNotCreated') {
-                alertMessage('Unregistered user', 'The user could not be registered please try again later.', 'error')
-                setSubmit(false)
-            } else if(res === 'UserCreated') {
-                setSubmit(false)
-                const confirm = await (await alertMessage('Registered user', 'The user has been successfully registered.', 'success')).isConfirmed
-                if(confirm) {
+           try {
+                const res = await (await post('auth/signUp', signUp)).server
+                if (res === 'InvalidCode') {
+                    alertMessage('Invalid access code', 'The access code is invalid please check that the code is valid.', 'error')
                     setSubmit(false)
-                    setHidden(false)
+                } else if(res === 'UserNotCreated') {
+                    alertMessage('Unregistered user', 'The user could not be registered please try again later.', 'error')
+                    setSubmit(false)
+                } else if(res === 'UserCreated') {
+                    setSubmit(false)
+                    const confirm = await (await alertMessage('Registered user', 'The user has been successfully registered.', 'success')).isConfirmed
+                    if(confirm) {
+                        setSubmit(false)
+                        setHidden(false)
+                    }
                 }
-            }
+            } catch(e) {
+                setSubmit(false)
+                alertMessage('No Internet connection', 'No internet connection please check your internet.', 'error')
+           }
         }
     }
 

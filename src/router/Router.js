@@ -42,7 +42,10 @@ const Router = () => {
                     <PrivateRoute path="/home" auth={auth.isAuth()}>
                         <Home />
                     </PrivateRoute>
-                    <PrivateRoute path="/dashboard" auth={auth.isAuth()}>
+                    <PrivateRoute path="/dashboard/:route" auth={auth.isAuth()}>
+                        <Dashboard />
+                    </PrivateRoute> 
+                    <PrivateRoute path="/dashboard/" auth={auth.isAuth()}>
                         <Dashboard />
                     </PrivateRoute> 
                     <Route path="*">
