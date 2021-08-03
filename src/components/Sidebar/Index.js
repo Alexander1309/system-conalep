@@ -1,14 +1,17 @@
 import { useState, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import auth from '../../lib/auth'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faCog, faHome, faUser } from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faCog} from '@fortawesome/free-solid-svg-icons'
 import { updateItSafely } from '../../lib/http'
 import { alertSelectFile, alertMessage } from '../../lib/alerts'
+import { routes } from '../../router/dashboard.routes'
 import './styles.css'
 
 const Sidebar  = () => {
+    const history = useHistory()
     const [user, setUser] = useState(null)
-    
     const handleGetUser = () => {
         const dataUser = JSON.parse(localStorage.getItem('user'))
         setUser(dataUser)
@@ -28,11 +31,18 @@ const Sidebar  = () => {
                     localStorage.setItem('user', JSON.stringify(dataUser))
                     handleGetUser()
                     alertMessage('Update Profile Picture', 'The profile picture has been updated correctly.', 'success')
-                } else if(res.server === 'profilePictureNotUpdate') {
-                    alertMessage('Update Profile Picture', 'Could not update profile picture please try again later.', 'error')
-                } else if(res.server === 'profilePictureNotValid') {
-                    alertMessage('Profile Picture Invalid', 'Image extension is not valid please use images in .jpg, .jpeg, .png, .ico format.', 'error')
-                }
+                } else if(res.server === 'profilePictureNotUpdate') alertMessage('Update Profile Picture', 'Could not update profile picture please try again later.', 'error')
+                else if(res.server === 'profilePictureNotValid') alertMessage('Profile Picture Invalid', 'Image extension is not valid please use images in .jpg, .jpeg, .png, .ico format.', 'error')
+                else if(res.server === 'SessionExpired') {
+                    const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
+                    if(confirm.isConfirmed) {
+                        auth.logOut(() => {
+                            localStorage.removeItem('token')
+                            localStorage.removeItem('user')
+                            history.push('/auth')
+                        })
+                    }
+                }   
             }catch(e) {
                 alertMessage('No Internet connection', 'No internet connection please check your internet.', 'error')
             }
@@ -63,35 +73,26 @@ const Sidebar  = () => {
                 </div>
                 <div className="menu-body">
                     <ul className="menu-nav">
-                        <li className="menu-item">
-                            <Link to="/dashboard" className="menu-item__link">
-                                <div className="d-flex ps-2">
-                                    <div>
-                                        <FontAwesomeIcon icon={faHome} className="me-2" />
-                                    </div>
-                                    <div>
-                                        <span>Home</span>
-                                    </div>
-                                </div>
-                            </Link>
-                        </li>
-                        <li className="menu-item">
-                            <Link to="/dashboard/users" className="menu-item__link">
-                                <div className="d-flex ps-2">
-                                    <div>
-                                        <FontAwesomeIcon icon={faUser} className="menu-item__icon me-2" />
-                                    </div>
-                                    <div>
-                                        <span>Users</span>
-                                    </div>
-                                </div>
-                            </Link>
-                        </li>
+                        { 
+                            routes.filter(r => r.roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1).map((route, i) => (
+                                <li className="menu-item"  key={i}>
+                                    <Link to={route.path} className="menu-item__link">
+                                        <div className="d-flex ps-2">
+                                            <div>
+                                                <FontAwesomeIcon icon={route.icon} className="me-2" />
+                                            </div>
+                                            <div>
+                                                <span>{route.title}</span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                </li>
+                            ))
+                        }
                     </ul>
                 </div>
             </div>
         </>
     )
 }
-
 export default Sidebar

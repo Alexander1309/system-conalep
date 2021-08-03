@@ -9,6 +9,7 @@ const UserModel = new model('Users', new Schema({
     role: { type: String, required: true },
     profilePicture: { type: String, default: 'icon' },
     pathProfilePicture: { type: String, default: 'icon'},
+    block: { type: Boolean, default: false },
     registeredOn: { type: Date, default: Date.now, required: true }
 }))
 

@@ -45,9 +45,6 @@ const Router = () => {
                     <PrivateRoute path="/dashboard/:route" auth={auth.isAuth()}>
                         <Dashboard />
                     </PrivateRoute> 
-                    <PrivateRoute path="/dashboard/" auth={auth.isAuth()}>
-                        <Dashboard />
-                    </PrivateRoute> 
                     <Route path="*">
                         <NoMatch />
                     </Route>

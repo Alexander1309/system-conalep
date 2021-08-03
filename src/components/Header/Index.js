@@ -19,7 +19,7 @@ const Header = ({ history }) => {
                                 <div className="ms-auto">
                                     <ul className="navbar-nav">
                                         <li>
-                                            <Link className="nav-link" to="/dashboard">Dashboard</Link>
+                                            <Link className="nav-link" to="/dashboard/home">Dashboard</Link>
                                         </li>
                                         <li>
                                             <Link className="nav-link" to="#" onClick={() => {

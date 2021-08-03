@@ -29,8 +29,8 @@ export const getItSafelyById = async urlWithId => {
     return res
 }
 
-export const postItSafely = async url => {
-    const res = await (await axios.get(`${address}${url}`, {
+export const postItSafely = async (url, data) => {
+    const res = await (await axios.post(`${address}${url}`, data, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
@@ -38,8 +38,8 @@ export const postItSafely = async url => {
     return res
 }
 
-export const updateItSafely = async (url, data) => {
-    const res = await (await axios.put(`${address}${url}`, data, {
+export const updateItSafely = async (urlWithId, data) => {
+    const res = await ( await axios.put(`${address}${urlWithId}`, data, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }
@@ -47,9 +47,8 @@ export const updateItSafely = async (url, data) => {
     return res
 }
 
-
-export const deleteItSafely = async url => {
-    const res = await (await axios.delete(`${address}${url}`, {
+export const deleteItSafely = async urlWithId => {
+    const res = await (await axios.delete(`${address}${urlWithId}`, {
         headers: {
             'Authorization': `accessToken ${localStorage.getItem('token')}`
         }

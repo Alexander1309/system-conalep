@@ -9,8 +9,25 @@ export const alertMessage = async (title, text, icon) => {
         title: `${title}`,
         text: `${text}`,
         icon: `${icon}`,
-        confirmButtonText: 'Aceptar',
+        confirmButtonText: 'Accept',
         confirmButtonColor: '#047c64',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        didClose: () => {
+            MySwal.clickConfirm()
+        }
+    })
+    return res
+}
+
+export const alertConfirm = async (title) => {
+    const res = await MySwal.fire({
+        title: `${title}`,
+        confirmButtonText: 'Accept',
+        confirmButtonColor: '#047c64',
+        showCancelButton: true,
+        cancelButtonText: 'Cancel',
+        cancelButtonColor: '#ff0039',
         allowOutsideClick: false,
         allowEscapeKey: false,
         didClose: () => {

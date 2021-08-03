@@ -1,25 +1,30 @@
-import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import { component } from '../../router/dashboard.routes'
 import './styles.css'
 
 import Sidebar from '../Sidebar/Index'
-import Users from '../Users/Index'
 
 const Dashboard = () => {
     const { route } = useParams()
     
     const handleView = () => {
-        if(route === 'users') return <Users />
+        if(component.hasOwnProperty(route) && component[route].roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1) {
+            document.title = `Conalep - Dashboard / ${component[route].title}`
+            return component[route].component
+        }
+        document.title = 'Conalep - Dashboard / 404'
+        return <h1>404</h1>
     }
     
-    useEffect(() => {
-        document.title = "Conalep - Dashboard"
-    }, [])
     return (
         <>
-            <div className="container-fluid d-flex">
+            <div className="container-fluid">
                 <Sidebar />
-                {handleView()}
+                <div className="container-dashboard mt-5">
+                    <div>
+                        {handleView()}
+                    </div>
+                </div>
             </div>
         </>
     )

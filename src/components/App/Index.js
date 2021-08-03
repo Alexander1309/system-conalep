@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import { withRouter, Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import auth from '../../lib/auth'
 import './styles.css'
 import Logo from '../../img/logo-v.svg'
 
-const App = ({ history }) => {
+const App = () => {
   const [hidden, setHidden] = useState(true)
 
   useEffect(() => {
@@ -22,7 +22,7 @@ const App = ({ history }) => {
           <div>
             <div className="ms-auto">
               { hidden 
-                ? <Link className="btn btn-signUp" to="/auth">Sign Up</Link>
+                ? <Link className="btn btn-signUp" to="/auth">Sign In</Link>
                 : <Link className="btn btn-signUp" to="/Home">Home</Link>
               }
             </div>
@@ -36,4 +36,4 @@ const App = ({ history }) => {
   )
 }
 
-export default withRouter(App)
+export default App

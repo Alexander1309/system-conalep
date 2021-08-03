@@ -27,17 +27,17 @@ functions.verifyToken = (req, res, next) => {
         const token = req.headers['authorization'].split(' ')[1]
         if(token !== undefined){
             jwt.verify(token, process.env.SECRET_KEY, (err, data) => {
-                if(err) res.sendStatus(403)
+                if(err) res.json({server: 'SessionExpired'}).status(403)
                 else {
                     req.dataUser = data.user
                     next()
                 }
             })
         } else {
-            res.sendStatus(403)
+            res.json({server: 'SessionExpired'}).status(409)
         }
     } catch(e) {
-        res.sendStatus(403)
+        res.senStatus(409)
     }
 }
 

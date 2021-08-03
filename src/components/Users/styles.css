@@ -1,0 +1,27 @@
+.pe-pointer {
+    cursor: pointer;
+    transition: all 300ms ease;
+}
+
+.pe-pointer:hover {
+    color: var(--color-primary);
+}
+
+.pe-pointer:active {
+    color: var(--color-secondary);
+}
+
+.icon-user{
+    display: block;
+    font-size: 40px;
+    margin: auto;
+}
+
+.img-user {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #000;
+    margin: auto;
+}

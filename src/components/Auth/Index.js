@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { withRouter } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import { alertMessage } from '../../lib/alerts'
 import auth from '../../lib/auth'
 import { post } from '../../lib/http'
@@ -10,8 +10,9 @@ import Logo from '../../img/logo-v.svg'
 import SignIn from './SignIn'
 import SignUp from './SignUp'
 
-const Auth = ({ history }) => {
-    const [hidden, setHidden] = useState(true)
+const Auth = () => {
+    const history = useHistory()
+    const [hidden, setHidden] = useState(false)
     const [submit, setSubmit] = useState(false)
     const [signIn, setSignIn] = useState({ email: '', password: '' })
     const [signUp, setSignUp] = useState({ name: '', lastName: '', email: '', password: '', accessCode: '' })
@@ -38,8 +39,11 @@ const Auth = ({ history }) => {
                     if(confirm) {
                         localStorage.setItem('token', res.token)
                         localStorage.setItem('user', JSON.stringify(res.dataUser))
-                        setTimeout(auth.signIn(() => history.push('/home')), 300)
+                        auth.signIn(() => history.push('/'))
                     }
+                } else if(res.server === 'BlockedUser') {
+                    alertMessage('Blocked user', 'The user is temporarily blocked. If you think this is an error, please contact the administrator.', 'info')
+                    setSubmit(false)
                 }
             } catch(e) {
                 setSubmit(false)
@@ -124,4 +128,4 @@ const Auth = ({ history }) => {
     )
 }
 
-export default withRouter(Auth)
+export default Auth
