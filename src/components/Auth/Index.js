@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { alertMessage } from '../../lib/alerts'
 import auth from '../../lib/auth'
 import { post } from '../../lib/http'
+import { getUrlValue } from '../../lib/functions'
 import { validateEmails, validatePasswords } from '../../lib/validations'
 import './styles.css'
 import Logo from '../../img/logo-v.svg'
@@ -12,7 +13,7 @@ import SignUp from './SignUp'
 
 const Auth = () => {
     const history = useHistory()
-    const [hidden, setHidden] = useState(false)
+    const [hidden, setHidden] = useState(true)
     const [submit, setSubmit] = useState(false)
     const [signIn, setSignIn] = useState({ email: '', password: '' })
     const [signUp, setSignUp] = useState({ name: '', lastName: '', email: '', password: '', accessCode: '' })
@@ -67,6 +68,9 @@ const Auth = () => {
                 } else if(res === 'UserNotCreated') {
                     alertMessage('Unregistered user', 'The user could not be registered please try again later.', 'error')
                     setSubmit(false)
+                }else if(res === 'EmailExist') {
+                    alertMessage('Email Exist', 'The email already exists, please try another one.', 'error')
+                    setSubmit(false)
                 } else if(res === 'UserCreated') {
                     setSubmit(false)
                     const confirm = await (await alertMessage('Registered user', 'The user has been successfully registered.', 'success')).isConfirmed
@@ -74,7 +78,7 @@ const Auth = () => {
                         setSubmit(false)
                         setHidden(false)
                     }
-                }
+                } 
             } catch(e) {
                 setSubmit(false)
                 alertMessage('No Internet connection', 'No internet connection please check your internet.', 'error')
@@ -86,6 +90,8 @@ const Auth = () => {
         if(auth.isAuth()) history.push('/home')
         if(hidden) document.title = "Conalep - Sign Up"
         else document.title = "Conalep - Sign In"
+        const accessCode = getUrlValue('accessCode')
+        setSignUp({ name: '', email: '', password: '', accessCode})
     }, [history, hidden])
 
     return (

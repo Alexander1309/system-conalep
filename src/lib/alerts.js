@@ -37,15 +37,26 @@ export const alertConfirm = async (title) => {
     return res
 }
 
-export const alertSelectFile = async (title, accept) => {
+export const alertSelectFile = async (title, subTitle, accept) => {
     const { value: file } = await MySwal.fire({
         title: `${title}`,
         input: 'file',
         inputAttributes: {
-          'accept': `${accept}`,
+            'accept': `${accept}`,
         },
         allowOutsideClick: false,
         allowEscapeKey: false,
     })
+    if(file) {
+        MySwal.fire({
+            title: `${subTitle}`,
+            allowOutsideClick: false,
+            allowEnterKey: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                MySwal.showLoading()
+            }
+        }) 
+    }
     return file
 }

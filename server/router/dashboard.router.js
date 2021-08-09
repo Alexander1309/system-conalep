@@ -64,10 +64,13 @@ router.delete('/deleteUser/:id', verifyToken, async (req, res) => {
 })
 
 router.post('/accessCode', async (req, res) => {
-    const { workArea, role } = req.body
+    const { workArea, twoWorkArea, role } = req.body
+    let worksArea = [workArea]
+    if(twoWorkArea !== "") worksArea = [workArea, twoWorkArea]
+    if(role === "Admin") worksArea.push("Users")
     try {
-        const accessCode = await jwt.sign({workArea, role}, process.env.SECRET_KEY, {expiresIn: '1m'})
-        res.json({server: 'AccessCodeCreate', accessCode}).status(200)
+        const accessCode = await jwt.sign({worksArea, role}, process.env.SECRET_KEY, {expiresIn: '1d'})
+        res.json({server: 'AccessCodeCreate', accessCode, worksArea}).status(200)
     } catch(e) {
         res.json({server: 'AccessCodeNotCreate'}).status(200)
     }

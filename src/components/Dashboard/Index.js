@@ -1,19 +1,19 @@
-import { useParams } from 'react-router-dom'
+import { useParams, Redirect } from 'react-router-dom'
 import { component } from '../../router/dashboard.routes'
 import './styles.css'
 
-import Sidebar from '../Sidebar/Index'
+import Sidebar from './Sidebar/Index'
 
 const Dashboard = () => {
     const { route } = useParams()
     
     const handleView = () => {
-        if(component.hasOwnProperty(route) && component[route].roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1) {
+        if(component.hasOwnProperty(route) && component[route].roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1  && JSON.parse(localStorage.getItem('user')).workArea.indexOf(`${route.charAt(0).toUpperCase()}${route.slice(1)}`) > -1) {
             document.title = `Conalep - Dashboard / ${component[route].title}`
             return component[route].component
         }
         document.title = 'Conalep - Dashboard / 404'
-        return <h1>404</h1>
+        return <Redirect to="/404" />
     }
     
     return (

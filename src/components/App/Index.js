@@ -22,8 +22,8 @@ const App = () => {
           <div>
             <div className="ms-auto">
               { hidden 
-                ? <Link className="btn btn-signUp" to="/auth">Sign In</Link>
-                : <Link className="btn btn-signUp" to="/Home">Home</Link>
+                ? <Link className="btn btn-signUp" to="/auth">Sign Up</Link>
+                : <Link className="btn btn-signUp" to="/workArea/home">workArea</Link>
               }
             </div>
           </div>

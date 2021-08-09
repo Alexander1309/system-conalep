@@ -55,3 +55,17 @@ export const deleteItSafely = async urlWithId => {
     })).data
     return res
 }
+
+export const downloadFiles = async (url, nameFile, typeFile) => {
+    const res = await (await axios.get(url, {
+        responseType: 'blob'
+    })).data
+
+    const fileUrl = URL.createObjectURL(new Blob([res]))
+    const a = document.createElement('a')
+    a.setAttribute('href', fileUrl)
+    a.setAttribute('download', `${nameFile}.${typeFile}`)
+    document.body.appendChild(a)
+    a.click()
+    document.body.removeChild(a)
+}

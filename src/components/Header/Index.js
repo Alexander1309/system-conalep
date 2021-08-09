@@ -1,5 +1,6 @@
 import { Link, withRouter } from 'react-router-dom'
 import auth from '../../lib/auth'
+import { routes } from '../../router/dashboard.routes'
 import Logo from '../../img/logo-b.svg'
 
 const Header = ({ history }) => {
@@ -19,7 +20,7 @@ const Header = ({ history }) => {
                                 <div className="ms-auto">
                                     <ul className="navbar-nav">
                                         <li>
-                                            <Link className="nav-link" to="/dashboard/home">Dashboard</Link>
+                                            <Link className="nav-link" to={routes.find(r => r.roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1 && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1).path}>Dashboard</Link>
                                         </li>
                                         <li>
                                             <Link className="nav-link" to="#" onClick={() => {

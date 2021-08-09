@@ -38,22 +38,25 @@ router.post('/signIn', async (req, res) => {
 router.post('/signUp', async (req, res) => {
     const { name, lastName, email, password, accessCode } = req.body
     try {
-        const { workArea, role } = await jwt.verify(accessCode, process.env.SECRET_KEY)
-        if(workArea !== undefined && role !== undefined) {
-            const newUser = new UserModel({
-                name,
-                lastName,
-                email,
-                password: await encryptPassword(password),
-                workArea,
-                role,
-            })
-            try {
-                await newUser.save()
-                res.json({server: 'UserCreated'}).status(200)
-            } catch(e) {
-                res.json({server: 'UserNotCreated'}).status(200)
-            }
+        const { worksArea, role } = await jwt.verify(accessCode, process.env.SECRET_KEY)
+        if(worksArea !== undefined && role !== undefined) {
+            const user = await UserModel.findOne({email}).exec()
+            if(user === null) {
+                const newUser = new UserModel({
+                    name,
+                    lastName,
+                    email,
+                    password: await encryptPassword(password),
+                    workArea: worksArea,
+                    role,
+                })
+                try {
+                    await newUser.save()
+                    res.json({server: 'UserCreated'}).status(200)
+                } catch(e) {
+                    res.json({server: 'UserNotCreated'}).status(200)
+                }
+            } else res.json({server: 'EmailExist'}).status(200)
         } else res.json({server: 'InvalidCode'}).status(200)
     } catch(e) {
         res.json({server: 'InvalidCode'}).status(200)

@@ -8,8 +8,9 @@ import auth from '../lib/auth'
 
 import App from '../components/App/Index'
 import Auth from '../components/Auth/Index'
-import Home from '../components/Home/Index'
+import WorkArea from '../components/WorkArea/Index'
 import Dashboard from '../components/Dashboard/Index'
+import NotFound from '../components/NotFound/Index'
 
 const PrivateRoute = ({children, auth, ...rest}) => {
     return (
@@ -19,12 +20,6 @@ const PrivateRoute = ({children, auth, ...rest}) => {
             ? children
             : <Redirect push to={{pathname: "/", state: {from: location}}} />}
         />
-    )
-}
-
-const NoMatch = () => {
-    return (
-        <h1>404</h1>
     )
 }
 
@@ -39,14 +34,14 @@ const Router = () => {
                     <Route path="/auth">
                         <Auth />
                     </Route>
-                    <PrivateRoute path="/home" auth={auth.isAuth()}>
-                        <Home />
+                    <PrivateRoute path="/workArea/:workArea" auth={auth.isAuth()}>
+                        <WorkArea />
                     </PrivateRoute>
                     <PrivateRoute path="/dashboard/:route" auth={auth.isAuth()}>
                         <Dashboard />
                     </PrivateRoute> 
                     <Route path="*">
-                        <NoMatch />
+                        <NotFound />
                     </Route>
                 </Switch>
             </BrowserRouter>

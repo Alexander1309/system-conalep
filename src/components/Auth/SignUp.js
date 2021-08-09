@@ -29,7 +29,7 @@ const SignUp = ({ state, setState }) => {
                 </div>
                 <div className="mb-3">
                     <label htmlFor="code" className="form-label">Access code</label>
-                    <input type="text" id="code" name="code" className="form-control" onChange={(e) => setState({...state, accessCode: e.target.value})}/>
+                    <input type="text" id="code" name="code" className="form-control" defaultValue={state.accessCode} onChange={(e) => setState({...state, accessCode: e.target.value})}/>
                 </div>
             </div>
         </>
