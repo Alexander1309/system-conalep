@@ -8,11 +8,10 @@ const Dashboard = () => {
     const { route } = useParams()
     
     const handleView = () => {
-        if(component.hasOwnProperty(route) && component[route].roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1  && JSON.parse(localStorage.getItem('user')).workArea.indexOf(`${route.charAt(0).toUpperCase()}${route.slice(1)}`) > -1) {
+        if(component.hasOwnProperty(route) && component[route].roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1  && JSON.parse(localStorage.getItem('user')).workArea.indexOf(`${route.charAt(0).toUpperCase()}${route.slice(1)}`) > -1 && component[route].title !== 'Search') {
             document.title = `Conalep - Dashboard / ${component[route].title}`
-            return component[route].component
+            return component[route].dashboard
         }
-        document.title = 'Conalep - Dashboard / 404'
         return <Redirect to="/404" />
     }
     

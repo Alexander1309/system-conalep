@@ -40,7 +40,7 @@ const Auth = () => {
                     if(confirm) {
                         localStorage.setItem('token', res.token)
                         localStorage.setItem('user', JSON.stringify(res.dataUser))
-                        auth.signIn(() => history.push('/'))
+                        auth.signIn(() => history.push('/workAreas/office'))
                     }
                 } else if(res.server === 'BlockedUser') {
                     alertMessage('Blocked user', 'The user is temporarily blocked. If you think this is an error, please contact the administrator.', 'info')
@@ -87,7 +87,7 @@ const Auth = () => {
     }
 
     useEffect(() => {
-        if(auth.isAuth()) history.push('/home')
+        if(auth.isAuth()) history.push('/workArea/office')
         if(hidden) document.title = "Conalep - Sign Up"
         else document.title = "Conalep - Sign In"
         const accessCode = getUrlValue('accessCode')

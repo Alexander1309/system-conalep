@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import auth from '../../../lib/auth'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faCog} from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
 import { updateItSafely } from '../../../lib/http'
 import { alertSelectFile, alertMessage } from '../../../lib/alerts'
 import { routes } from '../../../router/dashboard.routes'
@@ -12,6 +12,7 @@ import './styles.css'
 const Sidebar  = () => {
     const history = useHistory()
     const [user, setUser] = useState(null)
+    
     const handleGetUser = () => {
         const dataUser = JSON.parse(localStorage.getItem('user'))
         setUser(dataUser)
@@ -57,7 +58,9 @@ const Sidebar  = () => {
             <div className="menu">
                 <div className="menu-header">
                     <div className="d-flex justify-content-end pt-2">
-                        <FontAwesomeIcon icon={faCog} className="btn-menu" />
+                        <Link to="/workAreas/office">
+                            <FontAwesomeIcon icon={faArrowLeft} className="btn-menu" />
+                        </Link>
                     </div>
                     <div className="d-flex flex-column justify-content-center align-items-center">
                         <div>

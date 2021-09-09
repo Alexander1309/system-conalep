@@ -10,7 +10,7 @@ import './styles.css'
 import Table from '../../Table/Index'
 import Card from '../../Card/Index'
 
-const titles = ["#", "Role", "Name", "Email", "Works Area", "", "Registered On", "Actions"]
+const titles = ["#", "Role", "Name", "Email", "Work Areas", "", "Registered On", "Actions"]
 
 const Users = () => {
     const history = useHistory()
@@ -76,7 +76,7 @@ const Users = () => {
         const workArea = document.querySelectorAll('#workArea')
         const userRol = document.querySelector('#userRol')
         workArea[0].value = "Work Area..."
-        if(hidden) workArea[1].value = "Work Area..."
+        if(hidden) workArea[1].value = "Two Work Area..."
         userRol.value = "User Type"
         setFormAccessCode({ workArea: '', twoWorkArea: '', role: ''})
     }
@@ -199,41 +199,41 @@ const Users = () => {
                                     <div className="col">
                                             <select className="form-select" id="workArea" name="workArea" defaultValue="Work Area..."  onChange={e => setFormAccessCode({ ...formAccessCode, workArea: e.target.value})}>
                                                 <option disabled>Work Area...</option>
-                                                <option value="Direccion">Dirección</option>
-                                                <option value="SecDelDirector">Secretario del director</option>
-                                                <option value="Escolares">Escolares</option>
-                                                <option value="PromAndVinculación">Promoción y Vinculación</option>
-                                                <option value="RecAdministrativos">Recursos Administrativos</option>
-                                                <option value="Preceptorias">Preceptorías</option>
-                                                <option value="Prefectura">Prefectura</option>
-                                                <option value="TrabajoSocial">Trabajo social</option>
-                                                <option value="FormacionTecnica">Formación técnica</option>
-                                                <option value="Biblioteca">Biblioeteca</option>
-                                                <option value="Calidad">Calidad</option>
-                                                <option value="Infraestructura">Infraestructura</option>
-                                                <option value="Informatica">Informática</option>
+                                                <option value="Office">Office</option>
+                                                <option value="SecretaryToTheDirector">Secretary to the director</option>
+                                                <option value="Schoolchildren">Schoolchildren</option>
+                                                <option value="PromotionAndLiaison">Promotion and Liaison</option>
+                                                <option value="AdministrativeResources">Administrative Resources</option>
+                                                <option value="Injunction">Injunction</option>
+                                                <option value="Prefecture">Prefecture</option>
+                                                <option value="SocialWork">Social Work</option>
+                                                <option value="TechnicalTraining">Technical Training</option>
+                                                <option value="Library">Library</option>
+                                                <option value="Quality">Quality</option>
+                                                <option value="Infrastructure">Infrastructure</option>
+                                                <option value="Computing">Computing</option>
                                             </select>
                                     </div>
                                     {hidden 
                                         ? 
                                             <div className="col">
                                                 <div className="mb-3">
-                                                <select className="form-select" id="workArea" name="workArea" defaultValue="Work Area..."  onChange={e => setFormAccessCode({ ...formAccessCode, twoWorkArea: e.target.value})}>
-                                                    <option disabled>Work Area...</option>
-                                                    <option value="Direccion">Dirección</option>
-                                                    <option value="SecDelDirector">Secretario del director</option>
-                                                    <option value="Escolares">Escolares</option>
-                                                    <option value="PromAndVinculación">Promoción y Vinculación</option>
-                                                    <option value="RecAdministrativos">Recursos Administrativos</option>
-                                                    <option value="Preceptorias">Preceptorías</option>
-                                                    <option value="Prefectura">Prefectura</option>
-                                                    <option value="TrabajoSocial">Trabajo social</option>
-                                                    <option value="FormacionTecnica">Formación técnica</option>
-                                                    <option value="Biblioteca">Biblioeteca</option>
-                                                    <option value="Calidad">Calidad</option>
-                                                    <option value="Infraestructura">Infraestructura</option>
-                                                    <option value="Informatica">Informática</option>
-                                            </select>
+                                                    <select className="form-select" id="workArea" name="workArea" defaultValue="Two Work Area..."  onChange={e => setFormAccessCode({ ...formAccessCode, twoWorkArea: e.target.value})}>
+                                                        <option disabled>Two Work Area...</option>
+                                                        <option value="Office">Office</option>
+                                                        <option value="SecretaryToTheDirector">Secretary to the director</option>
+                                                        <option value="Schoolchildren">Schoolchildren</option>
+                                                        <option value="PromotionAndLiaison">Promotion and Liaison</option>
+                                                        <option value="AdministrativeResources">Administrative Resources</option>
+                                                        <option value="Injunction">Injunction</option>
+                                                        <option value="Prefecture">Prefecture</option>
+                                                        <option value="SocialWork">Social Work</option>
+                                                        <option value="TechnicalTraining">Technical Training</option>
+                                                        <option value="Library">Library</option>
+                                                        <option value="Quality">Quality</option>
+                                                        <option value="Infrastructure">Infrastructure</option>
+                                                        <option value="Computing">Computing</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         : null

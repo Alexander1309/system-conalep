@@ -1,17 +1,20 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import auth from '../../lib/auth'
+import { useAuth } from '../../hooks/useAuth'
 import './styles.css'
 import Logo from '../../img/logo-v.svg'
 
 const App = () => {
-  const [hidden, setHidden] = useState(true)
+  const { isAuth } = useAuth()
+  const [hidden, setHidden] = useState(!isAuth)
 
+  
   useEffect(() => {
-    if(auth.isAuth()) setHidden(false)
+    if(isAuth) setHidden(false)
     document.title = "Conalep - Welcome"
-  }, [])
-
+  }, [isAuth])
+  
+  
   return (
     <>
       <div className="container-fluid">
@@ -23,7 +26,7 @@ const App = () => {
             <div className="ms-auto">
               { hidden 
                 ? <Link className="btn btn-signUp" to="/auth">Sign Up</Link>
-                : <Link className="btn btn-signUp" to="/workArea/home">workArea</Link>
+                : <Link className="btn btn-signUp" to="/workAreas/office">Home</Link>
               }
             </div>
           </div>

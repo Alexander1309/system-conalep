@@ -1,97 +1,99 @@
 import { faAngleRight, faUser } from "@fortawesome/free-solid-svg-icons"
 
+
+import View from '../components/Dashboard/Home/Index'
 import Users from '../components/Dashboard/Users/Index'
 
 export const routes = [
     {
-        path: '/dashboard/direccion',
+        path: '/dashboard/office',
         icon: faAngleRight,
-        workArea: 'Direccion',
-        title: 'Direccion',
+        workArea: 'Office',
+        title: 'Office',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/secDelDirector',
+        path: '/dashboard/secretaryToTheDirector',
         icon: faAngleRight,
-        workArea: 'SecDelDirector',
-        title: 'Secretario Del Director',
+        workArea: 'SecretaryToTheDirector',
+        title: 'Secretary to the director',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/escolares',
+        path: '/dashboard/schoolchildren',
         icon: faAngleRight,
-        workArea: 'Escolares',
-        title: 'Escolares',
+        workArea: 'Schoolchildren',
+        title: 'Schoolchildren',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/promAndVinculación',
+        path: '/dashboard/promotionAndLiaison',
         icon: faAngleRight,
-        workArea: 'PromAndVinculación',
-        title: 'Promoción y Vinculación',
+        workArea: 'PromotionAndLiaison',
+        title: 'Promotion and Liaison',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/recAdministrativos',
+        path: '/dashboard/administrativeResources',
         icon: faAngleRight,
-        workArea: 'RecAdministrativos',
-        title: 'Recursos Administrativos',
+        workArea: 'AdministrativeResources',
+        title: 'Administrative Resources',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/preceptorias',
+        path: '/dashboard/injunction',
         icon: faAngleRight,
-        workArea: 'Preceptorias',
-        title: 'Preceptorías',
+        workArea: 'Injunction',
+        title: 'Injunction',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/prefectura',
+        path: '/dashboard/prefecture',
         icon: faAngleRight,
-        workArea: 'Prefectura',
-        title: 'Prefectura',
+        workArea: 'Prefecture',
+        title: 'Prefecture',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/trabajoSocial',
+        path: '/dashboard/socialWork',
         icon: faAngleRight,
-        workArea: 'TrabajoSocial',
-        title: 'Trabajo Social',
+        workArea: 'SocialWork',
+        title: 'Social Work',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/formacionTecnica',
+        path: '/dashboard/technicalTraining',
         icon: faAngleRight,
-        workArea: 'FormacionTecnica',
-        title: 'Formación técnica',
+        workArea: 'TechnicalTraining',
+        title: 'Technical Training',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/biblioteca',
+        path: '/dashboard/library',
         icon: faAngleRight,
-        workArea: 'Biblioteca',
-        title: 'Biblioteca',
+        workArea: 'Library',
+        title: 'Library',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/calidad',
+        path: '/dashboard/quality',
         icon: faAngleRight,
-        workArea: 'Calidad',
-        title: 'Calidad',
+        workArea: 'Quality',
+        title: 'Quality',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/infraestructura',
+        path: '/dashboard/infrastructure',
         icon: faAngleRight,
-        workArea: 'Infraestructura',
-        title: 'Infraestructura',
+        workArea: 'Infrastructure',
+        title: 'Infrastructure',
         roles: ['User', 'Admin']
     },
     {
-        path: '/dashboard/Informatica',
+        path: '/dashboard/computing',
         icon: faAngleRight,
-        workArea: 'Informática',
-        title: 'Informática',
+        workArea: 'Computing',
+        title: 'Computing',
         roles: ['User', 'Admin']
     },
     {
@@ -104,74 +106,92 @@ export const routes = [
 ]
 
 export const component = {
-    direccion: {
-        title: 'Direccion',
+    office: {
+        title: 'Office',
         component: <h1>Direccion</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    secDelDirector: {
-        title: 'Secretario Del Director',
+    secretaryToTheDirector: {
+        title: 'secretary to the director',
         component: <h1>Secretario Del Director</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    escolares: {
-        title: 'Escolares',
+    schoolchildren: {
+        title: 'Schoolchildren',
         component: <h1>Escolares</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    promAndVinculación: {
-        title: 'Promoción y Vinculación',
+    promotionAndLiaison: {
+        title: 'Promotion and Liaison',
         component: <h1>Promoción y Vinculación</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    RecAdministrativos: {
-        title: 'Recursos Administrativos',
+    administrativeResources: {
+        title: 'Administrative Resources',
         component: <h1>Recursos Administrativos</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    preceptorias: {
-        title: 'Preceptorías',
-        component: <h1>Preceptorías</h1>,
+    injunction: {
+        title: 'Injunction',
+        component: <h1>Mandato</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    prefectura: {
-        title: 'Prefectura',
+    prefecture: {
+        title: 'Prefecture',
         component: <h1>Prefectura</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    trabajoSocial: {
-        title: 'Trabajo Social',
+    socialWork: {
+        title: 'Social Work',
         component: <h1>Trabajo Social</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    formacionTecnica: {
-        title: 'Formación Técnica',
+    technicalTraining: {
+        title: 'Technical Training',
         component: <h1>Formación Técnica</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    biblioteca: {
-        title: 'Biblioteca',
+    library: {
+        title: 'Library',
         component: <h1>Biblioteca</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    calidad: {
-        title: 'Calidad',
+    quality: {
+        title: 'Quality',
         component: <h1>Calidad</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    infraestructura: {
-        title: 'Infraestructura',
+    infrastructure: {
+        title: 'Infrastructure',
         component: <h1>Infraestructura</h1>,
+        dashboard: <View />,
         roles: ['User', 'Admin']
     },
-    informatica: {
-        title: 'Informática',
+    computing: {
+        title: 'Computing',
         component: <h1>Informática</h1>,
+        dashboard: <View />,
+        roles: ['User', 'Admin']
+    },
+    search: {
+        title: 'Search',
+        component: <h1>Search</h1>,
         roles: ['User', 'Admin']
     },
     users: {
         title: 'Users',
-        component: <Users />,
+        dashboard: <Users />,
         roles: ['Admin']
     }
 }
