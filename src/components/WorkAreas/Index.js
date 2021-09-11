@@ -1,23 +1,16 @@
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Header from '../Header/Index'
-import { component } from '../../router/dashboard.routes'
+import { routes } from '../../router/dashboard.routes'
 
 const WorkArea = () => {
     const { workArea } = useParams()
-
-    const handleView = () => {
-        if(component.hasOwnProperty(workArea) && component[workArea].title !== 'Users') {
-            document.title = `Conalep - Work Areas / ${component[workArea].title}`
-            return component[workArea].component
-        }
-        return <Redirect to="/404" />
-    }
+    document.title = `Conalep - Work Areas / ${routes[routes.findIndex(r => r.workAreasPath === workArea)].title}`
 
     return (
         <>
             <Header />
             <div className="container mt-3">
-                {handleView()}
+                <h1>{workArea.toUpperCase()}</h1>
             </div>
         </>
     )

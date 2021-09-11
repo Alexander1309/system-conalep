@@ -67,7 +67,7 @@ const Header = () => {
                                             </ul>
                                         </li>
                                         <li>
-                                            <Link className="nav-link" to={routes.find(r => r.roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1 && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1).path}>Dashboard</Link>
+                                            <Link className="nav-link" to={routes.find(r => r.roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1 && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1).dashboardPath}>Dashboard</Link>
                                         </li>
                                         <li>
                                             <Link className="nav-link" to="#" onClick={() => {

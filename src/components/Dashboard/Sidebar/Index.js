@@ -79,7 +79,7 @@ const Sidebar  = () => {
                         { 
                             routes.filter(r => r.roles.indexOf(JSON.parse(localStorage.getItem('user')).role) > -1 && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1).map((route, i) => (
                                 <li className="menu-item"  key={i}>
-                                    <Link to={route.path} className="menu-item__link">
+                                    <Link to={route.dashboardPath} className="menu-item__link">
                                         <div className="d-flex ps-2">
                                             <div>
                                                 <FontAwesomeIcon icon={route.icon} className="me-2" />
