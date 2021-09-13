@@ -1,13 +1,13 @@
-const Table = ({children, titles, bg}) => {
+const Table = ({children, titles}) => {
     return (
         <>
-            <div className={`table-responsive card-header bg-${bg} rounded-2`}>
-                <table className={`table table-${bg}`}>
-                    <thead>
+            <div className={`overflow-auto card bg-light rounded-2`} style={{height: '20rem'}}>
+                <table className="table table-striped">
+                    <thead className="bg-secondary card-header sticky-top text-white">
                         <tr>
                             {
                                 titles.map((title, i) => (
-                                    <th scope="col" key={i}>{title}</th>
+                                    <th scope="col" className="p-2" key={i}>{title}</th>
                                 ))
                             }
                         </tr>

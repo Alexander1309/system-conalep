@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { alertCirculeProgress, alertMessage } from './alerts'
 const address = 'http://localhost:3007/'
 
 export const get = async url => {
@@ -57,10 +58,12 @@ export const deleteItSafely = async urlWithId => {
 }
 
 export const downloadFiles = async (url, nameFile, typeFile) => {
+    alertCirculeProgress('Download File', 'The download of the file is in process. This may take some time depending on the size of the file, please wait.')
     const res = await (await axios.get(url, {
         responseType: 'blob'
     })).data
 
+    console.log(res)
     const fileUrl = URL.createObjectURL(new Blob([res]))
     const a = document.createElement('a')
     a.setAttribute('href', fileUrl)
@@ -68,4 +71,5 @@ export const downloadFiles = async (url, nameFile, typeFile) => {
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
+    if(res !== null) alertMessage('Download completed', 'Download completed successfully.', 'success')
 }

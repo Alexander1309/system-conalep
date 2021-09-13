@@ -18,7 +18,7 @@ const Dashboard = () => {
         <>
             <div className="container-fluid">
                 <Sidebar />
-                <div className="container-dashboard mt-5">
+                <div className="container-dashboard mt-3">
                     <div>
                         {handleView()}
                     </div>

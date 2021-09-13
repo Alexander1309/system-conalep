@@ -6,28 +6,77 @@ const multer = require('multer')
 const { v4: uuid } = require('uuid')
 const { unlink } = require('fs-extra')
 const UserModel = require('../model/User.model')
+const PostModel = require('../model/Post.model')
 
-router.get('/', async (req, res) => {
-    const users = await UserModel.find().exec()
-    res.json(users)
-})
-
-router.get('/profilePicture/:img', (req, res) => {
-    res.sendFile(path.join(__dirname, '../assets', 'img', 'profilePicture', `${req.params.img}`))
-})
-
-const storage = multer.diskStorage({
+const storageProfilePicture = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, path.join(__dirname, '../assets', 'img', 'profilePicture'))
+        cb(null, path.join(__dirname, '../assets', 'profilePicture'))
     },
     filename: (req, file, cb) => {
         cb(null, `${uuid()}.jpg`)
     },
 })
 
-const upload = multer({ storage: storage })
+const storagePosts = multer.diskStorage({
+    destination: (req, file, cb) => {
+        cb(null, path.join(__dirname, '../assets', 'postFiles'))
+    },
+    filename: (req, file, cb) => {
+        cb(null, `${uuid()}.${file.originalname.split('.').reverse()[0]}`)
+    }
+})
 
-router.put('/updatePhoto/:id', verifyToken, upload.single('profilePicture'), async (req, res) => {
+const uploadPictureProfile = multer({ storage: storageProfilePicture })
+const uploadPosts = multer({ storage: storagePosts })
+
+router.get('/posts/:workArea', async (req, res) => {
+    const workArea = req.params.workArea
+    const posts = await PostModel.find({ workArea }).exec()
+    res.json(posts)
+})
+
+router.get('/users', async (req, res) => {
+    const users = await UserModel.find().exec()
+    res.json(users)
+})
+
+router.get('/postFile/:file', (req, res) => {
+    res.sendFile(path.join(__dirname, '../assets', 'postFiles', `${req.params.file}`))
+})
+
+router.post('/newPost', verifyToken, uploadPosts.single('fileObj'), async (req, res) => {
+    const { title, workArea, description, fileName, fileSize } = req.body
+    const newPost = new PostModel({
+        title,
+        workArea,
+        urlFile: `http://localhost:3007/dashboard/postFile/${req.file.filename}`,
+        filePath: req.file.path,
+        fileName,
+        fileSize,
+        description
+    })
+    try {
+        await newPost.save()
+        res.json({server: 'PostCreated'}).status(200)
+    } catch(e) {
+        res.json({server: 'PostNotCreated'}).status(200)
+    }
+})
+
+router.delete('/deletePostFile/:id', verifyToken, async (req, res) => {
+    const id = req.params.id
+    const filePath = await (await PostModel.findOne({_id: id}).exec()).filePath
+    await unlink(filePath)
+    const deleteUser = await PostModel.deleteOne({_id: id}).exec()
+    if(deleteUser.ok === 1) res.json({server: 'PostDeleted'}).status(200)
+    else res.json({server: 'PostNotDeleted'}).status(200)
+})
+
+router.get('/profilePicture/:img', (req, res) => {
+    res.sendFile(path.join(__dirname, '../assets', 'profilePicture', `${req.params.img}`))
+})
+
+router.put('/updatePhoto/:id', verifyToken, uploadPictureProfile.single('profilePicture'), async (req, res) => {
     const userId = req.params.id
     const exp = /jpg|jpeg|png|ico/
     const type = req.file.originalname.split('.')[1]

@@ -10,7 +10,7 @@ import './styles.css'
 import Table from '../../Table/Index'
 import Card from '../../Card/Index'
 
-const titles = ["#", "Role", "Name", "Email", "Work Areas", "", "Registered On", "Actions"]
+const titles = ["#", "Role", "Name", "Email", "Work Areas", "Registered On", "Actions"]
 
 const Users = () => {
     const history = useHistory()
@@ -21,27 +21,13 @@ const Users = () => {
     const [accessCode, setAccessCode] = useState(null)
     
     const cards = [
-        {
-            title: "Registered Users",
-            color: "secondary",
-            icon: <FontAwesomeIcon icon={faUser} className="fs-3 me-2 text-secondary" />,
-            count: count.users
-        },
-        {
-            title: "Registered Admin",
-            color: "warning",
-            icon: <FontAwesomeIcon icon={faCrown} className="fs-3 me-2 text-warning" />,
-            count: count.admins
-        },
-        {
-            title: "Block Users",
-            color: "danger",
-            icon: <FontAwesomeIcon icon={faUserLock} className="fs-3 me-2 text-danger" />,
-            count: count.blockUsers
-        }
+        { title: "Registered Users",color: "secondary",icon: <FontAwesomeIcon icon={faUser} className="fs-3 me-2 text-secondary" />,count: count.users},
+        { title: "Registered Admin",color: "warning",icon: <FontAwesomeIcon icon={faCrown} className="fs-3 me-2 text-warning" />,count: count.admins},
+        { title: "Block Users",color: "danger",icon: <FontAwesomeIcon icon={faUserLock} className="fs-3 me-2 text-danger" />,count: count.blockUsers}
     ]
+    
     const handleGetUsers = async () => {
-        const res = await get('dashboard/')
+        const res = await get('dashboard/users')
         const users = res.filter(user => user.email !== JSON.parse(localStorage.getItem('user')).email)
         serUsers(users)
         setCount({users: res.length, admins: res.filter(user => user.role === "Admin").length, blockUsers: res.filter(user => user.block).length})
@@ -282,19 +268,18 @@ const Users = () => {
                     </div>
                 </div>
                 <div>
-                    <Table titles={titles} bg="light">
+                    <Table titles={titles}>
                         {users !== null 
                             ? 
                                 users.length > 0 
                                     ? 
                                         users.map((user, i) => (
                                             <tr key={user._id} className={user.block ? 'table-danger': 'table-light'}>
-                                                <th scope="row">{i + 1}</th>
-                                                <th scope="row"><FontAwesomeIcon icon={user.role === 'Admin' ? faCrown : faUser} className={user.role === 'Admin' ? 'text-warning' : 'text-secondary'} /></th>
+                                                <td>{i + 1}</td>
+                                                <td><FontAwesomeIcon icon={user.role === 'Admin' ? faCrown : faUser} className={user.role === 'Admin' ? 'text-warning' : 'text-secondary'} /></td>
                                                 <td>{user.name} {user.lastName}</td>
                                                 <td>{user.email}</td>
-                                                <td>{user.workArea[0]}</td>
-                                                <td>{user.workArea.length > 1 && user.workArea[1] !== 'Users' ? user.workArea[1] : ''}</td>
+                                                <td><span className="pe-2">{user.workArea[0]}</span><span>{user.workArea.length > 1 && user.workArea[1] !== 'Users' ? user.workArea[1] : ''}</span></td>
                                                 <td>{new Date(user.registeredOn).toLocaleDateString()}</td>
                                                 <td>
                                                     {user.block
@@ -306,7 +291,7 @@ const Users = () => {
                                             </tr>
                                         ))
                                     : <tr><td colSpan="8">No registered users...</td></tr>
-                            : <tr><td colSpan="8">Cargando...</td></tr>
+                            : <tr><td colSpan="8">Loading...</td></tr>
                         }
                     </Table>
                 </div>

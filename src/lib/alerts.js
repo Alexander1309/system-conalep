@@ -20,7 +20,7 @@ export const alertMessage = async (title, text, icon) => {
     return res
 }
 
-export const alertConfirm = async (title) => {
+export const alertConfirm = async title => {
     const res = await MySwal.fire({
         title: `${title}`,
         confirmButtonText: 'Accept',
@@ -35,6 +35,19 @@ export const alertConfirm = async (title) => {
         }
     })
     return res
+}
+
+export const alertCirculeProgress = (title, text) => {
+    MySwal.fire({
+        title: `${title}`,
+        text: `${text}`,
+        allowOutsideClick: false,
+        allowEnterKey: false,
+        allowEscapeKey: false,
+        didOpen: () => {
+            MySwal.showLoading()
+        }
+    }) 
 }
 
 export const alertSelectFile = async (title, subTitle, accept) => {
