@@ -63,7 +63,6 @@ export const downloadFiles = async (url, nameFile, typeFile) => {
         responseType: 'blob'
     })).data
 
-    console.log(res)
     const fileUrl = URL.createObjectURL(new Blob([res]))
     const a = document.createElement('a')
     a.setAttribute('href', fileUrl)

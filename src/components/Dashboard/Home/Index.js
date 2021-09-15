@@ -174,7 +174,7 @@ const View = () => {
                             ? 
                                 posts.length > 0 
                                     ? 
-                                        posts.map((post, i) => (
+                                        posts.reverse().map((post, i) => (
                                             <tr key={post._id}>
                                                 <td>{i + 1}</td>
                                                 <td title={post.title}>{post.title.length > 15 ? post.title.substring(0, 15).trimEnd() + '...' : post.title}</td>
