@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
 import { alertMessage } from '../../lib/alerts'
-import auth from '../../lib/auth'
+import { settingContext } from '../../contexts/settingContext'
 import { post } from '../../lib/http'
 import { getUrlValue } from '../../lib/functions'
 import { validateEmails, validatePasswords } from '../../lib/validations'
+import { FormattedMessage } from 'react-intl'
 import './styles.css'
 import Logo from '../../img/logo-v.svg'
 
@@ -13,6 +14,7 @@ import SignUp from './SignUp'
 
 const Auth = () => {
     const history = useHistory()
+    const setting = useContext(settingContext)
     const [hidden, setHidden] = useState(true)
     const [submit, setSubmit] = useState(false)
     const [signIn, setSignIn] = useState({ email: '', password: '' })
@@ -40,7 +42,7 @@ const Auth = () => {
                     if(confirm) {
                         localStorage.setItem('token', res.token)
                         localStorage.setItem('user', JSON.stringify(res.dataUser))
-                        auth.signIn(() => history.push('/workAreas/office'))
+                        setting.signIn(() => history.push('/workAreas/office'))
                     }
                 } else if(res.server === 'BlockedUser') {
                     alertMessage('Blocked user', 'The user is temporarily blocked. If you think this is an error, please contact the administrator.', 'info')
@@ -87,12 +89,12 @@ const Auth = () => {
     }
 
     useEffect(() => {
-        if(auth.isAuth()) history.push('/workArea/office')
+        if(setting.isAuth) history.push('/workAreas/office')
         if(hidden) document.title = "Conalep - Sign Up"
         else document.title = "Conalep - Sign In"
         const accessCode = getUrlValue('accessCode')
         setSignUp({ name: '', email: '', password: '', accessCode})
-    }, [history, hidden])
+    }, [setting, history, hidden])
 
     return (
         <>
@@ -103,7 +105,9 @@ const Auth = () => {
                 <form className="form" onSubmit={hidden === false ? handleSubmitSignIn : handleSubmitSignUp}>
                     <div className="wrap">
                         <div className="form-header">
-                            <h1 className="title">{ hidden === false ? 'Sign In' : 'Sign Up' }</h1>
+                            <h1 className="title">{ hidden === false 
+                                ? <FormattedMessage id="auth.signIn" defaultMessage="Sign In" />
+                                : <FormattedMessage id="auth.signUp" defaultMessage="Sign Up" /> }</h1>
                         </div>
                         <div className="form-body pt-2">
                             { hidden === false 
@@ -115,16 +119,25 @@ const Auth = () => {
                             <div className="mb-3 mt-4 d-grid gap-2">
                                 { submit === false 
                                     ?
-                                        <button className="btn btn-color" type="submit">{ hidden === false ? 'Sign In' : 'Sign Up' }</button>
+                                        <button className="btn btn-color" type="submit">{ hidden === false 
+                                            ? <FormattedMessage id="auth.signIn" defaultMessage="Sign In" /> 
+                                            : <FormattedMessage id="auth.signUp" defaultMessage="Sign Up" /> }</button>
                                     :
                                         <button className="btn btn-color" type="button" disabled>
                                             <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                            <span className="ps-2">Verifying data...</span>
+                                            <span className="ps-2">
+                                                <FormattedMessage id="auth.btn" defaultMessage="Verifying data..." />    
+                                            </span>
                                         </button>
                                 }
                             </div>
-                            <p className="mb-3 mr-2 not-s">{ hidden === false ? 'Not registered yet?' : 'Already have an account? ' }
-                                <span className="btn-active ps-1" onClick={handleHidden}>{ hidden === false ? 'Sign Up' : 'Sign In' }</span>
+                            <p className="mb-3 mr-2 not-s">{ hidden === false 
+                                ? <FormattedMessage id="auth.msg1" defaultMessage="Not registered yet?" />
+                                : <FormattedMessage id="auth.msg2" defaultMessage="Already have an account?" />
+                            }
+                                <span className="btn-active ps-1" onClick={handleHidden}>{ hidden === false 
+                                ? <FormattedMessage id="auth.signUp" defaultMessage="Sign Up" /> 
+                                : <FormattedMessage id="auth.signIn" defaultMessage="Sign Ip" /> }</span>
                             </p>
                         </div>
                     </div>

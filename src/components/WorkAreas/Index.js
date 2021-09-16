@@ -3,6 +3,7 @@ import Header from '../Header/Index'
 import { routes } from '../../router/dashboard.routes'
 import { usePost } from '../../hooks/usePost'
 import { downloadFiles } from '../../lib/http'
+import { FormattedMessage } from 'react-intl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt, faDownload, faFileUpload, faArchive, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons'
 import Icon from '../../img/365cons-032.svg'
@@ -10,7 +11,7 @@ import Icon from '../../img/365cons-032.svg'
 const WorkArea = () => {
     const { workArea } = useParams()
     const { posts, resultSearch, searchPosts } = usePost(workArea)
-    document.title = `Conalep - Work Areas / ${routes[routes.findIndex(r => r.workAreasPath === workArea)].title}`
+    document.title = `Conalep - Work Areas / ${routes[routes.findIndex(r => r.workAreasPath === workArea)].titles[localStorage.getItem('lang') === 'en-Us' ? 0 : 1]}`
 
     return (
         <>
@@ -113,21 +114,27 @@ const WorkArea = () => {
                                                 <div className="d-flex justify-content-center">
                                                     <FontAwesomeIcon icon={faExclamationTriangle} className="text-warning" style={{fontSize: '9rem'}} />
                                                 </div>
-                                                <span className="fs-1 fw-bold">¡There is no coincidences!</span>
+                                                <span className="fs-1 fw-bold">
+                                                    <FormattedMessage id="workArea.alert1" defaultMessage="¡There is no coincidences!" />
+                                                </span>
                                             </div>
                             : 
                                 <div className="d-flex flex-column align-items-center mt-5">
                                     <div className="d-flex justify-content-center">
                                         <img src={Icon} alt="lo" className="w-75" />
                                     </div>
-                                    <span className="fs-1 fw-bold">No publications</span>
+                                    <span className="fs-1 fw-bold">
+                                        <FormattedMessage id="workArea.alert2" defaultMessage="No publications" />
+                                    </span>
                                 </div>
                         : 
                             <div className="d-flex flex-column align-items-center mt-5">
                                 <div className="text-center">
                                     <div className="spinner-grow fs-5" style={{width: '5rem', height: '5rem'}} role="status"></div>
                                 </div>
-                                <span className="fs-1 fw-bold">Loading...</span>
+                                <span className="fs-1 fw-bold">
+                                    <FormattedMessage id="workArea.alert3" defaultMessage="Loading..." />
+                                </span>
                             </div>
                 }
             </div>

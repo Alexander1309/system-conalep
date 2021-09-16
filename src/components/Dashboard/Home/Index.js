@@ -1,18 +1,20 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import { alertSelectFile, alertMessage, alertCirculeProgress, alertConfirm } from '../../../lib/alerts'
 import { formatSizeFile } from '../../../lib/functions'
 import { postItSafely, downloadFiles, deleteItSafely } from '../../../lib/http'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FormattedMessage } from 'react-intl'
 import { faCalendarAlt, faDownload, faFileUpload, faArchive } from '@fortawesome/free-solid-svg-icons'
 import Table from '../../Table/Index'
-import auth from '../../../lib/auth'
 import { usePost } from '../../../hooks/usePost'
+import { settingContext } from '../../../contexts/settingContext'
 
 const th = ['#', 'Title', 'Description', 'Name File', 'Download File', 'Create on', 'Action']
 
 const View = () => {
     const { route } = useParams()
+    const setting = useContext(settingContext)
     const { posts, getPosts } = usePost(route)
     const history = useHistory()
     const [newPost, setNewPost] = useState({ title: '', fileObj: null, fileName: '', fileSize: 0, description: '' })
@@ -47,7 +49,7 @@ const View = () => {
                 else if(res.server === 'SessionExpired') {
                     const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
                     if(confirm.isConfirmed) {
-                        auth.logOut(() => {
+                        setting.logOut(() => {
                             localStorage.removeItem('token')
                             localStorage.removeItem('user')
                             history.push('/auth')
@@ -71,7 +73,7 @@ const View = () => {
                 else if(server === 'SessionExpired') {
                     const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
                     if(confirm.isConfirmed) {
-                        auth.logOut(() => {
+                        setting.logOut(() => {
                             localStorage.removeItem('token')
                             localStorage.removeItem('user')
                             history.push('/auth')
@@ -103,31 +105,47 @@ const View = () => {
                         <form onSubmit={handleSubmit}>
                             <div className="card bg-dark text-white rounded-2 ms-auto">
                                 <div className="card-header">
-                                    <h3>New Post</h3>
+                                    <h3>
+                                        <FormattedMessage id="workAreas.newPost" defaultMessage="New Post" />
+                                    </h3>
                                 </div>
                                 <div className="card-body">
                                     <div className="row">
                                         <div className="col">
                                             <div className="mb-3">
-                                                <label htmlFor="title" className="form-label">Post title</label>
-                                                <input type="text" className="form-control" name="title" id="title" placeholder="Post title" onChange={e => setNewPost({...newPost, title: e.target.value})} />
+                                                <label htmlFor="title" className="form-label">
+                                                    <FormattedMessage id="workAreas.title" defaultMessage="Post title" />
+                                                </label>
+                                                <input type="text" className="form-control" name="title" id="title" onChange={e => setNewPost({...newPost, title: e.target.value})} />
                                             </div>
                                         </div>
                                         <div className="col">
                                             <div className="mb-3">
-                                                <label className="form-label">{newPost.file === null ? 'Select File' : 'Selected File'}</label>
-                                                <button className={newPost.fileObj === null ? 'btn btn-info d-block w-100' : 'btn btn-success d-block w-100'} type="button" onClick={handleSelectFile}>{newPost.fileObj === null ? 'Select File' : 'Selected File'}</button>
+                                                <label className="form-label">
+                                                    {newPost.file === null 
+                                                    ? <FormattedMessage id="workAreas.btnFile1" defaultMessage="Select File" />
+                                                    : <FormattedMessage id="workAreas.btnFile1" defaultMessage="Selected File" />
+                                                    }
+                                                </label>
+                                                <button className={newPost.fileObj === null ? 'btn btn-info d-block w-100' : 'btn btn-success d-block w-100'} type="button" onClick={handleSelectFile}>{newPost.fileObj === null 
+                                                    ? <FormattedMessage id="workAreas.btnFile1" defaultMessage="Select File" />
+                                                    : <FormattedMessage id="workAreas.btnFile1" defaultMessage="Selected File" />
+                                                }</button>
                                             </div>
                                         </div>
                                         <div className="mb-3">
-                                            <label htmlFor="description" className="form-label">Description</label>
-                                            <textarea className="form-control" id="description" style={{resize:'none'}} rows="3" placeholder="Post description" onChange={e => setNewPost({...newPost, description: e.target.value})} />
+                                            <label htmlFor="description" className="form-label">
+                                                <FormattedMessage id="workAreas.postDesc" defaultMessage="Description" />
+                                            </label>
+                                            <textarea className="form-control" id="description" style={{resize:'none'}} rows="3" onChange={e => setNewPost({...newPost, description: e.target.value})} />
                                         </div>
                                     </div>
                                 </div>
                                 <div className="card-footer">
                                     <div className="mb-3 d-grid gap-2">
-                                        <button className="btn btn-primary" type="submit">Create Post</button>
+                                        <button className="btn btn-primary" type="submit">
+                                            <FormattedMessage id="workAreas.btnPostCreate" defaultMessage="Create Post" />
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +155,7 @@ const View = () => {
                         <div className="card bg-dark text-white rounded-2" style={{maxHeight: '55%'}}>
                             <div className="card-header d-flex justify-content-between align-items-center">
                                 <div>
-                                    <span title={newPost.title === '' ? 'Post title': newPost.title}>{newPost.title === '' ? 'Post title' : newPost.title.length >= 28 ? `${newPost.title.substring(0, 28)}...` : newPost.title}</span>
+                                    <span title={newPost.title === '' ? <FormattedMessage id="workAreas.title" defaultMessage="Post title" /> : newPost.title}>{newPost.title === '' ? <FormattedMessage id="workAreas.title" defaultMessage="Post title" /> : newPost.title.length >= 28 ? `${newPost.title.substring(0, 28)}...` : newPost.title}</span>
                                 </div>
                                 <div>
                                     <FontAwesomeIcon icon={faCalendarAlt} className="me-1" />
@@ -150,7 +168,7 @@ const View = () => {
                                         <FontAwesomeIcon style={{fontSize: '4rem'}} icon={newPost.fileObj === null ? faFileUpload : faArchive} />
                                     </div>
                                     <div className="col-9">
-                                        <p title={newPost.description === '' ? 'Post description' : newPost.description}>{newPost.description === '' ? 'Post description' : newPost.description.length > 100 ? `${newPost.description.substring(0, 100).trimEnd()}...` : newPost.description}</p>
+                                        <p title={newPost.description === '' ? <FormattedMessage id="workAreas.postDesc" defaultMessage="Post title" /> : newPost.description}>{newPost.description === '' ? <FormattedMessage id="workAreas.postDesc" defaultMessage="Post title" /> : newPost.description.length > 100 ? `${newPost.description.substring(0, 100).trimEnd()}...` : newPost.description}</p>
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +187,7 @@ const View = () => {
                     </div>
                 </div>
                 <div className="mt-3">
-                    <Table titles={th}>
+                    <Table id="workAreas" titles={th}>
                         {posts !== null 
                             ? 
                                 posts.length > 0 
@@ -188,12 +206,22 @@ const View = () => {
                                                 </td>
                                                 <td>{new Date(post.created_on).toLocaleDateString()}</td>
                                                 <td>
-                                                    <button className="btn btn-danger rounded-2 ms-2" onClick={() => handelDeletePost(post._id, post.title)}>Delete</button>
+                                                    <button className="btn btn-danger rounded-2 ms-2" onClick={() => handelDeletePost(post._id, post.title)}>
+                                                        <FormattedMessage id="users.actions3" defaultMessage="Delete" />
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))
-                                    : <tr><td colSpan="8">No publications...</td></tr>
-                            : <tr><td colSpan="8">Loading...</td></tr>
+                                    : <tr>
+                                            <td colSpan="8">
+                                                <FormattedMessage id="workArea.alert2" defaultMessage="No publications" />
+                                            </td>
+                                        </tr>
+                            : <tr>
+                                    <td colSpan="8">
+                                        <FormattedMessage id="workArea.alert3" defaultMessage="Loading..." />
+                                    </td>
+                                </tr>
                         }
                     </Table>
                 </div>

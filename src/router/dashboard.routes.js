@@ -7,7 +7,7 @@ export const routes = [
         workAreasPath: 'office',
         icon: faAngleRight,
         workArea: 'Office',
-        title: 'Office',
+        titles: ['Office', 'Direccion'],
         roles: ['User', 'Admin']
     },
     {
@@ -15,7 +15,7 @@ export const routes = [
         workAreasPath: 'secretaryToTheDirector',
         icon: faAngleRight,
         workArea: 'SecretaryToTheDirector',
-        title: 'Secretary to the director',
+        titles: ['Secretary to the director', 'Secretario del director'],
         roles: ['User', 'Admin']
     },
     {
@@ -23,7 +23,7 @@ export const routes = [
         workAreasPath: 'schoolchildren',
         icon: faAngleRight,
         workArea: 'Schoolchildren',
-        title: 'Schoolchildren',
+        titles: ['Schoolchildren', 'Escolares'],
         roles: ['User', 'Admin']
     },
     {
@@ -31,7 +31,7 @@ export const routes = [
         workAreasPath: 'promotionAndLiaison',
         icon: faAngleRight,
         workArea: 'PromotionAndLiaison',
-        title: 'Promotion and Liaison',
+        titles: ['Promotion and Liaison', 'Promocion y Vinculacion'],
         roles: ['User', 'Admin']
     },
     {
@@ -39,7 +39,7 @@ export const routes = [
         workAreasPath: 'administrativeResources',
         icon: faAngleRight,
         workArea: 'AdministrativeResources',
-        title: 'Administrative Resources',
+        titles: ['Administrative Resources', 'Recursos administrativos'],
         roles: ['User', 'Admin']
     },
     {
@@ -47,7 +47,7 @@ export const routes = [
         workAreasPath: 'injunction',
         icon: faAngleRight,
         workArea: 'Injunction',
-        title: 'Injunction',
+        titles: ['Injunction', 'Preceptorias'],
         roles: ['User', 'Admin']
     },
     {
@@ -55,7 +55,7 @@ export const routes = [
         workAreasPath: 'prefecture',
         icon: faAngleRight,
         workArea: 'Prefecture',
-        title: 'Prefecture',
+        titles: ['Prefecture', 'Prefectura'],
         roles: ['User', 'Admin']
     },
     {
@@ -63,7 +63,7 @@ export const routes = [
         workAreasPath: 'socialWork',
         icon: faAngleRight,
         workArea: 'SocialWork',
-        title: 'Social Work',
+        titles: ['Social Work', 'Trabajo Social'],
         roles: ['User', 'Admin']
     },
     {
@@ -71,7 +71,7 @@ export const routes = [
         workAreasPath: 'technicalTraining',
         icon: faAngleRight,
         workArea: 'TechnicalTraining',
-        title: 'Technical Training',
+        titles: ['Technical Training', 'Formación técnica'],
         roles: ['User', 'Admin']
     },
     {
@@ -79,7 +79,7 @@ export const routes = [
         workAreasPath: 'library',
         icon: faAngleRight,
         workArea: 'Library',
-        title: 'Library',
+        titles: ['Library', 'Biblioteca'],
         roles: ['User', 'Admin']
     },
     {
@@ -87,7 +87,7 @@ export const routes = [
         workAreasPath: 'quality',
         icon: faAngleRight,
         workArea: 'Quality',
-        title: 'Quality',
+        titles: ['Quality', 'Calidad'],
         roles: ['User', 'Admin']
     },
     {
@@ -95,7 +95,7 @@ export const routes = [
         workAreasPath: 'infrastructure',
         icon: faAngleRight,
         workArea: 'Infrastructure',
-        title: 'Infrastructure',
+        titles: ['Infrastructure', 'Infraestructura'],
         roles: ['User', 'Admin']
     },
     {
@@ -103,14 +103,14 @@ export const routes = [
         workAreasPath: 'computing',
         icon: faAngleRight,
         workArea: 'Computing',
-        title: 'Computing',
+        titles: ['Computing', 'Informatica'],
         roles: ['User', 'Admin']
     },
     {
         dashboardPath: '/dashboard/users',
         icon: faUser,
-        title: 'Users',
         workArea: 'Users',
+        titles: ['Users', 'Usuarios'],
         roles: ['Admin']
     },
 ]

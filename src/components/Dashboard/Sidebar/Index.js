@@ -1,16 +1,18 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import auth from '../../../lib/auth'
 import { Link } from 'react-router-dom'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faUserCircle, faArrowLeft} from '@fortawesome/free-solid-svg-icons'
+import { faUserCircle, faArrowLeft, faCog } from '@fortawesome/free-solid-svg-icons'
 import { updateItSafely } from '../../../lib/http'
 import { alertSelectFile, alertMessage } from '../../../lib/alerts'
+import { FormattedMessage } from 'react-intl'
 import { routes } from '../../../router/dashboard.routes'
+import { settingContext } from '../../../contexts/settingContext'
 import './styles.css'
 
 const Sidebar  = () => {
     const history = useHistory()
+    const setting = useContext(settingContext)
     const [user, setUser] = useState(null)
     
     const handleGetUser = () => {
@@ -37,7 +39,7 @@ const Sidebar  = () => {
                 else if(res.server === 'SessionExpired') {
                     const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
                     if(confirm.isConfirmed) {
-                        auth.logOut(() => {
+                        setting.logOut(() => {
                             localStorage.removeItem('token')
                             localStorage.removeItem('user')
                             history.push('/auth')
@@ -85,7 +87,7 @@ const Sidebar  = () => {
                                                 <FontAwesomeIcon icon={route.icon} className="me-2" />
                                             </div>
                                             <div>
-                                                <span>{route.title}</span>
+                                                <span>{<FormattedMessage id={`workAreas.${route.titles[0].toLowerCase()}`} defaultMessage={route.titles[0]} />}</span>
                                             </div>
                                         </div>
                                     </Link>
@@ -93,6 +95,46 @@ const Sidebar  = () => {
                             ))
                         }
                     </ul>
+                </div>
+                <div className="menu-footer">
+                    <div className="btn-group dropup">
+                        <button className="border-0 bg-transparent text-white dropdown-toggle" type="button" id="settings" data-bs-toggle="dropdown" aria-expanded="false">
+                            <FontAwesomeIcon icon={faCog} className="btn-menu mt-1" />
+                        </button>
+                        <ul className="dropdown-menu dropdown-menu-dark" aria-labelledby="settings">
+                            
+                            <li>
+                                <span className="dropdown-item-text">
+                                    <FormattedMessage id="app.lang" defaultMessage="Language" />
+                                </span>
+                            </li>
+                            <li><hr className="dropdown-divider" /></li>
+                            <li>
+                                <span className="dropdown-item cursor-pointer" onClick={() => setting.setLang('en-Us')}>
+                                    <FormattedMessage id="app.langEnglish" defaultMessage="English" />
+                                </span>
+                            </li>
+                            <li>
+                                <span className="dropdown-item cursor-pointer" onClick={() => setting.setLang('es-Mx')}>
+                                    <FormattedMessage id="app.langSpanish" defaultMessage="Spanish" />
+                                </span>
+                            </li>
+                            <li><hr className="dropdown-divider" /></li>
+                            <li>
+                                <span className="dropdown-item">
+                                    <Link className="text-white text-decoration-none" to="#" onClick={() => {
+                                        setting.logOut(() => {
+                                                localStorage.removeItem('token')
+                                                localStorage.removeItem('user')
+                                                history.push('/')
+                                            })
+                                        }}>
+                                            <FormattedMessage id="header.logOut" defaultMessage="Log Out" />
+                                    </Link>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </>

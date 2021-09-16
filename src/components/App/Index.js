@@ -1,18 +1,19 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { useAuth } from '../../hooks/useAuth'
+import { settingContext } from '../../contexts/settingContext'
+import { FormattedMessage } from 'react-intl'
 import './styles.css'
 import Logo from '../../img/logo-v.svg'
 
 const App = () => {
-  const { isAuth } = useAuth()
-  const [hidden, setHidden] = useState(!isAuth)
+  const setting = useContext(settingContext)
+  const [hidden, setHidden] = useState(!setting.isAuth)
 
   
   useEffect(() => {
-    if(isAuth) setHidden(false)
-    document.title = "Conalep - Welcome"
-  }, [isAuth])
+    if(setting.isAuth) setHidden(false)
+    document.title = localStorage.getItem('lang') === 'en-Us' ? 'Conalep - Welcome' : 'Conalep - Bienvenidos'
+  }, [setting])
   
   
   return (
@@ -25,14 +26,20 @@ const App = () => {
           <div>
             <div className="ms-auto">
               { hidden 
-                ? <Link className="btn btn-signUp" to="/auth">Sign Up</Link>
-                : <Link className="btn btn-signUp" to="/workAreas/office">Home</Link>
+                ? <Link className="btn btn-signUp" to="/auth">
+                    <FormattedMessage id="app.btn1" defaultMessage="Sign Up" />
+                  </Link>
+                : <Link className="btn btn-signUp" to="/workAreas/office">
+                    <FormattedMessage id="app.btn2" defaultMessage="Home" />
+                  </Link>
               }
             </div>
           </div>
         </div>
         <div className="d-flex justify-content-center">
-          <h1 className="title">Welcome to the conalep system</h1>
+          <h1 className="title">
+              <FormattedMessage id="app.title" defaultMessage="Welcome to the conalep system" />
+          </h1>
         </div>
       </div>
     </>

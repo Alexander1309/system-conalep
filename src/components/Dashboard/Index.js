@@ -10,7 +10,7 @@ const Dashboard = () => {
     const { route } = useParams()
     
     const handleView = () => {
-        document.title = `Conalep - Dashboard / ${route === 'users' ? 'Users' : routes[routes.findIndex(r => r.workAreasPath === route && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1)].title}`
+        document.title = `Conalep - Dashboard / ${route === 'users' ? localStorage.getItem('lang') === 'en-Us' ? 'Users': 'Usuarios' : routes[routes.findIndex(r => r.workAreasPath === route && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1)].titles[localStorage.getItem('lang') === 'en-Us' ? 0 : 1]}`
         return (JSON.parse(localStorage.getItem('user')).role === 'Admin' && route === 'users') ? <Users /> : (routes[routes.findIndex(r => r.workAreasPath === route && JSON.parse(localStorage.getItem('user')).workArea.indexOf(r.workArea) > -1)] !== undefined) ? <Home /> : <Redirect to="/404" />
     }
     

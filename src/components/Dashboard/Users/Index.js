@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useContext } from 'react'
 import { useHistory } from 'react-router-dom'
-import auth from '../../../lib/auth'
+import { settingContext } from '../../../contexts/settingContext'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faUser, faCrown, faUserLock, faCopy } from '@fortawesome/free-solid-svg-icons'
 import { alertMessage, alertConfirm } from '../../../lib/alerts'
 import { get, postItSafely, updateItSafely, deleteItSafely } from '../../../lib/http'
+import { FormattedMessage } from 'react-intl'
 import './styles.css'
 
 import Table from '../../Table/Index'
@@ -14,6 +15,7 @@ const titles = ["#", "Role", "Name", "Email", "Work Areas", "Registered On", "Ac
 
 const Users = () => {
     const history = useHistory()
+    const setting = useContext(settingContext)
     const [users, serUsers] = useState(null)
     const [hidden, setHidden] = useState(false)
     const [count, setCount] = useState({ users: 0, admins: 0, blockUsers: 0 })
@@ -23,7 +25,7 @@ const Users = () => {
     const cards = [
         { title: "Registered Users",color: "secondary",icon: <FontAwesomeIcon icon={faUser} className="fs-3 me-2 text-secondary" />,count: count.users},
         { title: "Registered Admin",color: "warning",icon: <FontAwesomeIcon icon={faCrown} className="fs-3 me-2 text-warning" />,count: count.admins},
-        { title: "Block Users",color: "danger",icon: <FontAwesomeIcon icon={faUserLock} className="fs-3 me-2 text-danger" />,count: count.blockUsers}
+        { title: "Blocked Users",color: "danger",icon: <FontAwesomeIcon icon={faUserLock} className="fs-3 me-2 text-danger" />,count: count.blockUsers}
     ]
     
     const handleGetUsers = async () => {
@@ -48,7 +50,7 @@ const Users = () => {
             } else if(res.server === 'SessionExpired') {
                 const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
                 if(confirm.isConfirmed) {
-                    auth.logOut(() => {
+                    setting.logOut(() => {
                         localStorage.removeItem('token')
                         localStorage.removeItem('user')
                         history.push('/auth')
@@ -94,7 +96,7 @@ const Users = () => {
                 else if(server === 'SessionExpired') {
                     const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
                     if(confirm.isConfirmed) {
-                        auth.logOut(() => {
+                        setting.logOut(() => {
                             localStorage.removeItem('token')
                             localStorage.removeItem('user')
                             history.push('/auth')
@@ -123,7 +125,7 @@ const Users = () => {
                     else if(server === 'SessionExpired') {
                         const confirm = await alertMessage('Session expired', 'Your session has expired, please log in again.', 'warning')
                         if(confirm.isConfirmed) {
-                            auth.logOut(() => {
+                            setting.logOut(() => {
                                 localStorage.removeItem('token')
                                 localStorage.removeItem('user')
                                 history.push('/auth')
@@ -151,7 +153,7 @@ const Users = () => {
                             cards.map((card, i) => (
                                 <div className="col" key={i}>
                                     <Card  
-                                        title={card.title} 
+                                        title={<FormattedMessage id={`users.card${i+1}`} defaultMessage={card.title} />} 
                                         icon={card.icon} 
                                         count={card.count} 
                                         color={card.color} 
@@ -165,11 +167,15 @@ const Users = () => {
                     <div className="card rounded-2 user-select-none">
                         <div className="card-header d-flex justify-content-between">
                             <div>
-                                <span className="fs-4">Generate access code</span>
+                                <span className="fs-4">
+                                    <FormattedMessage id="users.title" defaultMessage="Generate access Code" />
+                                </span>
                             </div>
                             <div>
                                 <div className="form-check">
-                                    <label className="form-check-label" htmlFor="twoWorkAreas">Adding two work areas</label>
+                                    <label className="form-check-label" htmlFor="twoWorkAreas">
+                                        <FormattedMessage id="users.titleAccessCode" defaultMessage="Adding two work areas" />
+                                    </label>
                                     <input className="form-check-input" type="checkbox" 
                                     onClick={() => {
                                         setHidden(!hidden)
@@ -235,7 +241,9 @@ const Users = () => {
                                     </div>
                                     <div className="col">
                                         <div className="mb-3 d-grid gap-2">
-                                            <button type="submit" className="btn btn-secondary">Generate Access Code</button>
+                                            <button type="submit" className="btn btn-secondary">
+                                                <FormattedMessage id="users.btnGenerateCodeAccess" defaultMessage="Generate Access Code" />
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -243,7 +251,9 @@ const Users = () => {
                             { accessCode !== null 
                                 ? 
                                     <>
-                                        <label htmlFor="accessCode" className="label-control">Access Code</label>
+                                        <label htmlFor="accessCode" className="label-control">
+                                            <FormattedMessage id="users.accessCode" defaultMessage="Access Code" />
+                                        </label>
                                         <div className="mb-3 mt-2 d-flex align-items-center">
                                             <div className="w-100 me-2">
                                                 <input type="text" className="form-control" id="accessCode" name="accessCode" defaultValue={accessCode} />
@@ -252,7 +262,9 @@ const Users = () => {
                                                 <FontAwesomeIcon icon={faCopy} className="fs-4 pe-pointer" onClick={() => handleCopyAccessCode('accessCode')} />
                                             </div>
                                         </div>
-                                        <label htmlFor="urlAccessCode" className="label-control">Url Access Code</label>
+                                        <label htmlFor="urlAccessCode" className="label-control">
+                                            <FormattedMessage id="users.urlAccessCode" defaultMessage="Url Access Code" />
+                                        </label>
                                         <div className="mb-3 mt-2 d-flex align-items-center">
                                             <div className="w-100 me-2">
                                                 <input type="text" className="form-control" id="urlAccessCode" name="urlAccessCode" defaultValue={`http://localhost:3000/auth?accessCode=${accessCode}`} />
@@ -268,7 +280,7 @@ const Users = () => {
                     </div>
                 </div>
                 <div>
-                    <Table titles={titles}>
+                    <Table id="users" titles={titles}>
                         {users !== null 
                             ? 
                                 users.length > 0 
@@ -283,15 +295,29 @@ const Users = () => {
                                                 <td>{new Date(user.registeredOn).toLocaleDateString()}</td>
                                                 <td>
                                                     {user.block
-                                                        ? <button className="btn btn-warning rounded-2" onClick={() => handleActions('Unblock', user._id, `${user.name} ${user.lastName}`)}>Unblock</button>
-                                                        : <button className="btn btn-warning rounded-2" onClick={() => handleActions('block', user._id, `${user.name} ${user.lastName}`)}>Block</button>
+                                                        ? <button className="btn btn-warning rounded-2" onClick={() => handleActions('Unblock', user._id, `${user.name} ${user.lastName}`)}>
+                                                            <FormattedMessage id="users.actions1" defaultMessage="Unblock" />
+                                                        </button>
+                                                        : <button className="btn btn-warning rounded-2" onClick={() => handleActions('block', user._id, `${user.name} ${user.lastName}`)}>
+                                                            <FormattedMessage id="users.actions2" defaultMessage="Block" />
+                                                        </button>
                                                     }
-                                                    <button className="btn btn-danger rounded-2 ms-2" onClick={() => handleActions('delete', user._id, `${user.name} ${user.lastName}`)}>Delete</button>
+                                                    <button className="btn btn-danger rounded-2 ms-2" onClick={() => handleActions('delete', user._id, `${user.name} ${user.lastName}`)}>
+                                                    <FormattedMessage id="users.actions3" defaultMessage="Delete" />
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))
-                                    : <tr><td colSpan="8">No registered users...</td></tr>
-                            : <tr><td colSpan="8">Loading...</td></tr>
+                                    : <tr>
+                                            <td colSpan="8">
+                                                <FormattedMessage id="workArea.alert4" defaultMessage="No registered users..." />
+                                            </td>
+                                        </tr>
+                            : <tr>
+                                    <td colSpan="8">
+                                        <FormattedMessage id="workArea.alert3" defaultMessage="Loading..." />
+                                    </td>
+                                </tr>
                         }
                     </Table>
                 </div>

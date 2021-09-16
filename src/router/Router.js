@@ -1,10 +1,11 @@
+import { useContext } from 'react'
 import {
     BrowserRouter,
     Redirect,
     Switch,
     Route,
 } from 'react-router-dom'
-import auth from '../lib/auth'
+import { settingContext } from '../contexts/settingContext'
 
 import App from '../components/App/Index'
 import Auth from '../components/Auth/Index'
@@ -24,6 +25,7 @@ const PrivateRoute = ({children, auth, ...rest}) => {
 }
 
 const Router = () => {
+    const setting = useContext(settingContext)
     return (
         <>
             <BrowserRouter>
@@ -34,10 +36,10 @@ const Router = () => {
                     <Route path="/auth">
                         <Auth />
                     </Route>
-                    <PrivateRoute path="/workAreas/:workArea" auth={auth.isAuth()}>
+                    <PrivateRoute path="/workAreas/:workArea" auth={setting.isAuth}>
                         <WorkArea />
                     </PrivateRoute>
-                    <PrivateRoute path="/dashboard/:route" auth={auth.isAuth()}>
+                    <PrivateRoute path="/dashboard/:route" auth={setting.isAuth}>
                         <Dashboard />
                     </PrivateRoute> 
                     <Route path="*">
