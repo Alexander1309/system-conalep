@@ -20,6 +20,8 @@ Mongoose.connect(process.env.DB_CONEXION, { useCreateIndex: true, useFindAndModi
 connection.on('error', () => console.log('An error occurred while connecting the database...'))
 connection.once('open', () => console.log('Donnected database...'))
 
+require('./bot')
+
 app.get('/', (req, res) => {
     res.send(`Server run on port -> ${port}`)
 })

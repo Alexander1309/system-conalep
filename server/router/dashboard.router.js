@@ -7,6 +7,7 @@ const { v4: uuid } = require('uuid')
 const { unlink } = require('fs-extra')
 const UserModel = require('../model/User.model')
 const PostModel = require('../model/Post.model')
+require('dotenv').config()
 
 const storageProfilePicture = multer.diskStorage({
     destination: (req, file, cb) => {
