@@ -39,7 +39,9 @@ functions.verifyToken = (req, res, next) => {
     } catch(e) {
         res.senStatus(409)
     }
-}
+} 
+
+functions.verifyRoles = roles => (req, res, next) => roles.indexOf(req.dataUser.role) > -1 ? next() : res.sendStatus(403)
 
 functions.getDate = () =>{
     try {

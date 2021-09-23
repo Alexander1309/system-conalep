@@ -38,8 +38,8 @@ router.post('/signIn', async (req, res) => {
 router.post('/signUp', async (req, res) => {
     const { name, lastName, email, password, accessCode } = req.body
     try {
-        const { worksArea, role } = await jwt.verify(accessCode, process.env.SECRET_KEY)
-        if(worksArea !== undefined && role !== undefined) {
+        const { workAreas, role } = await jwt.verify(accessCode, process.env.SECRET_KEY)
+        if(workAreas !== undefined && role !== undefined) {
             const user = await UserModel.findOne({email}).exec()
             if(user === null) {
                 const newUser = new UserModel({
@@ -47,7 +47,7 @@ router.post('/signUp', async (req, res) => {
                     lastName,
                     email,
                     password: await encryptPassword(password),
-                    workArea: worksArea,
+                    workArea: workAreas,
                     role,
                 })
                 try {

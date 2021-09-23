@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const { verifyToken } = require('../lib/functions')
+const { verifyToken, verifyRoles } = require('../lib/functions')
 const jwt = require('jsonwebtoken')
 const path = require('path')
 const multer = require('multer')
@@ -7,6 +7,7 @@ const { v4: uuid } = require('uuid')
 const { unlink } = require('fs-extra')
 const UserModel = require('../model/User.model')
 const PostModel = require('../model/Post.model')
+const { sendMessageToAdmins } = require('../lib/functions.bot')
 require('dotenv').config()
 
 const storageProfilePicture = multer.diskStorage({
@@ -45,7 +46,7 @@ router.get('/postFile/:file', (req, res) => {
     res.sendFile(path.join(__dirname, '../assets', 'postFiles', `${req.params.file}`))
 })
 
-router.post('/newPost', verifyToken, uploadPosts.single('fileObj'), async (req, res) => {
+router.post('/newPost', verifyToken, verifyRoles(['Admin', 'User']), uploadPosts.single('fileObj'), async (req, res) => {
     const { title, workArea, description, fileName, fileSize } = req.body
     const newPost = new PostModel({
         title,
@@ -64,7 +65,7 @@ router.post('/newPost', verifyToken, uploadPosts.single('fileObj'), async (req, 
     }
 })
 
-router.delete('/deletePostFile/:id', verifyToken, async (req, res) => {
+router.delete('/deletePostFile/:id', verifyToken, verifyRoles(['Admin', 'User']), async (req, res) => {
     const id = req.params.id
     const filePath = await (await PostModel.findOne({_id: id}).exec()).filePath
     await unlink(filePath)
@@ -77,7 +78,7 @@ router.get('/profilePicture/:img', (req, res) => {
     res.sendFile(path.join(__dirname, '../assets', 'profilePicture', `${req.params.img}`))
 })
 
-router.put('/updatePhoto/:id', verifyToken, uploadPictureProfile.single('profilePicture'), async (req, res) => {
+router.put('/updatePhoto/:id', verifyToken, verifyRoles(['Admin', 'User']),uploadPictureProfile.single('profilePicture'), async (req, res) => {
     const userId = req.params.id
     const exp = /jpg|jpeg|png|ico/
     const type = req.file.originalname.split('.')[1]
@@ -86,7 +87,7 @@ router.put('/updatePhoto/:id', verifyToken, uploadPictureProfile.single('profile
             if(user !== null) {
                 if(user.profilePicture !== 'icon' && user.pathProfilePicture !== 'icon') await unlink(user.pathProfilePicture)
                 try {
-                    const update = await UserModel.update({_id: userId}, { profilePicture: `http://localhost:3007/dashboard/profilePicture/${req.file.filename}`, pathProfilePicture: req.file.path }).exec()
+                    const update = await UserModel.updateOne({_id: userId}, { profilePicture: `http://localhost:3007/dashboard/profilePicture/${req.file.filename}`, pathProfilePicture: req.file.path }).exec()
                     if(update.ok === 1) res.json({server: 'profilePictureUpdate', url: `http://localhost:3007/dashboard/profilePicture/${req.file.filename}`}).status(200)
                     else res.json({server: 'profilePictureNotUpdate'}).status(200)
                 } catch(e) {
@@ -96,31 +97,38 @@ router.put('/updatePhoto/:id', verifyToken, uploadPictureProfile.single('profile
     } else res.json({server: 'profilePictureNotValid'}).status(200)
 })
 
-router.put('/blockUser/:id', verifyToken, async (req, res) => {
+router.put('/blockUser/:id', verifyToken, verifyRoles(['Admin']), async (req, res) => {
     const { block } = req.body 
     const id = req.params.id
-    const update = await UserModel.update({ _id: id }, { block: block }).exec()
-    if(update.ok === 1) res.json({server: 'BlockUser'}).status(200)
+    const update = await UserModel.updateOne({ _id: id }, { block: block }).exec()
+    if(update.ok === 1) {
+        res.json({server: 'BlockUser'}).status(200)
+        sendMessageToAdmins(`El admin: ${req.dataUser.name} ${req.dataUser.lastName} a ${block ? 'bloqueado' : 'desbloqueado' } a un usuario el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}`)
+    }
     else res.json({server: 'BlockNotUser'}).status(200)
 })
 
-router.delete('/deleteUser/:id', verifyToken, async (req, res) => {
+router.delete('/deleteUser/:id', verifyToken, verifyRoles(['Admin']), async (req, res) => {
     const id = req.params.id
     const path = await (await UserModel.findOne({_id: id}).exec()).pathProfilePicture
     if(path !== 'icon') await unlink(path)
     const deleteUser = await UserModel.deleteOne({_id: id}).exec()
-    if(deleteUser.ok === 1) res.json({server: 'UserDeleted'}).status(200)
+    if(deleteUser.ok === 1){
+        res.json({server: 'UserDeleted'}).status(200)
+        sendMessageToAdmins(`El admin: ${req.dataUser.name} ${req.dataUser.lastName} a eliminado a un usuario el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}`)
+    } 
     else res.json({server: 'UserNotDeleted'}).status(200)
 })
 
-router.post('/accessCode', async (req, res) => {
+router.post('/accessCode', verifyToken, verifyRoles(['Admin']), async (req, res) => {
     const { workArea, twoWorkArea, role } = req.body
-    let worksArea = [workArea]
-    if(twoWorkArea !== "") worksArea = [workArea, twoWorkArea]
-    if(role === "Admin") worksArea.push("Users")
+    let workAreas = [workArea]
+    if(twoWorkArea !== "") workAreas = [workArea, twoWorkArea]
+    if(role === "Admin") workAreas.push("Users")
     try {
-        const accessCode = await jwt.sign({worksArea, role}, process.env.SECRET_KEY, {expiresIn: '1d'})
-        res.json({server: 'AccessCodeCreate', accessCode, worksArea}).status(200)
+        const accessCode = await jwt.sign({workAreas, role}, process.env.SECRET_KEY, {expiresIn: '1d'})
+        sendMessageToAdmins(`El admin: ${req.dataUser.name} ${req.dataUser.lastName} a generado un access code el ${new Date().toLocaleDateString()} a las ${new Date().toLocaleTimeString()}`)
+        res.json({server: 'AccessCodeCreate', accessCode, workAreas}).status(200)
     } catch(e) {
         res.json({server: 'AccessCodeNotCreate'}).status(200)
     }
